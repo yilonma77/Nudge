@@ -261,14 +261,14 @@
   .ls-bell:active{transform:scale(.86)}
   .ls-bell svg{width:18px;height:18px;color:#fff}
   .ls-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.92);font-size:12px;font-weight:700;animation:bob 1.7s ease-in-out infinite;pointer-events:none}
-  /* Lock-screen notification (like the app's nudge alert) */
-  .ls-notif{position:absolute;left:14px;right:14px;bottom:44px;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 24px rgba(0,0,0,.28)}
-  .ls-notif .ai{width:32px;height:32px;border-radius:8px;background:var(--grad);display:grid;place-items:center;flex:none}
-  .ls-notif .ai svg{width:17px;height:17px;color:#fff}
+  /* Lock-screen notification — matches the app's nudge alert */
+  .ls-notif{position:absolute;left:13px;right:13px;bottom:46px;background:rgba(255,255,255,.8);backdrop-filter:saturate(150%) blur(12px);border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:11px 13px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 14px 30px rgba(0,0,0,.3)}
+  .ls-notif .ai{width:36px;height:36px;border-radius:10px;background:var(--grad);display:grid;place-items:center;flex:none;box-shadow:0 2px 6px rgba(123,80,246,.4)}
+  .ls-notif .ai svg{width:18px;height:18px;color:#fff}
   .ls-notif .nb{flex:1;min-width:0;text-align:left}
-  .ls-notif .top{display:flex;justify-content:space-between;font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-  .ls-notif .msg{font-size:13px;font-weight:700;color:#15151c;margin-top:1px;line-height:1.25}
-  .ls-notif .ctx{font-size:11.5px;color:#666}
+  .ls-notif .top{display:flex;justify-content:space-between;font-size:10.5px;color:#777;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .ls-notif .msg{font-size:14px;font-weight:700;color:#111;margin-top:2px;line-height:1.25}
+  .ls-notif .ctx{font-size:12px;color:#666;margin-top:1px}
 
   /* Home Screen mockup with the Nudge widget + bell */
   .hs-phone{width:244px;max-width:100%;height:330px;margin:0 auto;background:#0b0b12;border-radius:40px;position:relative;box-shadow:0 26px 60px rgba(20,10,60,.4);overflow:hidden;border:2px solid rgba(255,255,255,.07)}
@@ -294,8 +294,11 @@
   .di-bar .di-emoji{font-size:16px}
   .di-bar .di-count{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;letter-spacing:.4px}
   .di-bar .di-ring{width:18px;height:18px;border-radius:50%;border:2.4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin 1.5s linear infinite}
-  .widget-demo{width:202px;max-width:100%;border-radius:22px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;gap:11px;box-shadow:0 16px 36px rgba(80,60,160,.32);position:relative}
+  .widget-demo{width:202px;max-width:100%;border-radius:22px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;gap:11px;box-shadow:0 16px 36px rgba(80,60,160,.32);position:relative;overflow:hidden}
   .widget-demo .hsw-big b{font-size:30px}
+  .wd-cov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .widget-demo::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58))}
+  .widget-demo .hsw-top,.widget-demo .hsw-big,.widget-demo .hsw-controls{position:relative;z-index:1}
   .try-hint{font-size:13px;font-weight:700;color:var(--muted);animation:bob 1.7s ease-in-out infinite}
 </style>
 </head>
@@ -514,8 +517,9 @@
           <div class="ls-notif">
             <div class="ai">{BELL}</div>
             <div class="nb">
-              <div class="top"><span>Nudge</span><span data-i18n="phNow">now</span></div>
-              <div class="msg" data-i18n="nudgeReminder">🎂 Mom's Birthday is in 7 days!</div>
+              <div class="top"><span>NUDGE</span><span data-i18n="phNow">now</span></div>
+              <div class="msg" data-i18n="nudgeNotif">👋 Alex nudged you</div>
+              <div class="ctx" data-i18n="nudgeNotifBday">About Mom's Birthday</div>
             </div>
           </div>
         </div>
@@ -523,6 +527,7 @@
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
         <div class="widget-demo">
+          <img class="wd-cov" id="wdImg" src="https://loremflickr.com/440/300/tokyo,tower,skyline" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
           <div class="hsw-top" id="wdTop">✈️ Trip to Tokyo</div>
           <div class="hsw-big"><b id="wdNum">42</b><span data-i18n="lblDaysLeft">DAYS LEFT</span></div>
           <div class="hsw-controls">
@@ -531,7 +536,7 @@
             <button class="hsw-chev" id="wdNext" aria-label="Next">›</button>
           </div>
         </div>
-        <div class="try-hint" data-i18n="tryWidget">👇 Tap the arrows or the bell</div>
+        <div class="try-hint" data-i18n="tryWidget">👆 Tap the arrows or the bell</div>
       </div>
     </div>
     <div style="margin-top:34px">
@@ -687,7 +692,7 @@
   for(const l in EXTRA2){T[l]=Object.assign(T[l]||{},EXTRA2[l]);}
   const EXTRA3={"fr": {"scrHome": "Écran d'accueil", "scrLock": "Écran verrouillé"}, "es": {"scrHome": "Pantalla de inicio", "scrLock": "Pantalla bloqueada"}, "it": {"scrHome": "Schermata Home", "scrLock": "Schermata di blocco"}, "de": {"scrHome": "Home-Bildschirm", "scrLock": "Sperrbildschirm"}, "pt": {"scrHome": "Tela de início", "scrLock": "Tela bloqueada"}, "zh": {"scrHome": "主屏幕", "scrLock": "锁屏"}, "zh-Hant": {"scrHome": "主畫面", "scrLock": "鎖定畫面"}, "ko": {"scrHome": "홈 화면", "scrLock": "잠금 화면"}, "ja": {"scrHome": "ホーム画面", "scrLock": "ロック画面"}, "sv": {"scrHome": "Hemskärm", "scrLock": "Låsskärm"}, "da": {"scrHome": "Hjemmeskærm", "scrLock": "Låseskærm"}, "nb": {"scrHome": "Hjem-skjerm", "scrLock": "Låseskjerm"}, "tr": {"scrHome": "Ana ekran", "scrLock": "Kilit ekranı"}, "pl": {"scrHome": "Ekran główny", "scrLock": "Ekran blokady"}};
   for(const l in EXTRA3){T[l]=Object.assign(T[l]||{},EXTRA3[l]);}
-  const EXTRA4={"fr": {"nudgeReminder": "🎂 L'anniversaire de maman est dans 7 jours !", "tryWidget": "👇 Touchez les flèches ou la cloche"}, "es": {"nudgeReminder": "🎂 ¡El cumpleaños de mamá es en 7 días!", "tryWidget": "👇 Toca las flechas o la campana"}, "it": {"nudgeReminder": "🎂 Il compleanno della mamma è tra 7 giorni!", "tryWidget": "👇 Tocca le frecce o la campanella"}, "de": {"nudgeReminder": "🎂 Mamas Geburtstag ist in 7 Tagen!", "tryWidget": "👇 Tipp auf die Pfeile oder die Glocke"}, "pt": {"nudgeReminder": "🎂 O aniversário da mãe é em 7 dias!", "tryWidget": "👇 Toque nas setas ou no sino"}, "zh": {"nudgeReminder": "🎂 妈妈的生日还有 7 天！", "tryWidget": "👇 点箭头或铃铛"}, "zh-Hant": {"nudgeReminder": "🎂 媽媽的生日還有 7 天！", "tryWidget": "👇 點箭頭或鈴鐺"}, "ko": {"nudgeReminder": "🎂 엄마 생일이 7일 남았어요!", "tryWidget": "👇 화살표나 종을 누르세요"}, "ja": {"nudgeReminder": "🎂 ママの誕生日まであと7日！", "tryWidget": "👇 矢印かベルをタップ"}, "sv": {"nudgeReminder": "🎂 Mammas födelsedag om 7 dagar!", "tryWidget": "👇 Tryck på pilarna eller klockan"}, "da": {"nudgeReminder": "🎂 Mors fødselsdag om 7 dage!", "tryWidget": "👇 Tryk på pilene eller klokken"}, "nb": {"nudgeReminder": "🎂 Mammas bursdag om 7 dager!", "tryWidget": "👇 Trykk på pilene eller bjella"}, "tr": {"nudgeReminder": "🎂 Annenin doğum gününe 7 gün!", "tryWidget": "👇 Oklara veya zile dokun"}, "pl": {"nudgeReminder": "🎂 Urodziny mamy za 7 dni!", "tryWidget": "👇 Dotknij strzałek lub dzwonka"}};
+  const EXTRA4={"fr": {"nudgeReminder": "🎂 L'anniversaire de maman est dans 7 jours !", "tryWidget": "👆 Touchez les flèches ou la cloche", "nudgeNotifBday": "À propos de l'anniversaire de maman"}, "es": {"nudgeReminder": "🎂 ¡El cumpleaños de mamá es en 7 días!", "tryWidget": "👆 Toca las flechas o la campana", "nudgeNotifBday": "Sobre el cumpleaños de mamá"}, "it": {"nudgeReminder": "🎂 Il compleanno della mamma è tra 7 giorni!", "tryWidget": "👆 Tocca le frecce o la campanella", "nudgeNotifBday": "Sul compleanno della mamma"}, "de": {"nudgeReminder": "🎂 Mamas Geburtstag ist in 7 Tagen!", "tryWidget": "👆 Tipp auf die Pfeile oder die Glocke", "nudgeNotifBday": "Zu Mamas Geburtstag"}, "pt": {"nudgeReminder": "🎂 O aniversário da mãe é em 7 dias!", "tryWidget": "👆 Toque nas setas ou no sino", "nudgeNotifBday": "Sobre o aniversário da mãe"}, "zh": {"nudgeReminder": "🎂 妈妈的生日还有 7 天！", "tryWidget": "👆 点箭头或铃铛", "nudgeNotifBday": "关于妈妈的生日"}, "zh-Hant": {"nudgeReminder": "🎂 媽媽的生日還有 7 天！", "tryWidget": "👆 點箭頭或鈴鐺", "nudgeNotifBday": "關於媽媽的生日"}, "ko": {"nudgeReminder": "🎂 엄마 생일이 7일 남았어요!", "tryWidget": "👆 화살표나 종을 누르세요", "nudgeNotifBday": "엄마 생일에 대해"}, "ja": {"nudgeReminder": "🎂 ママの誕生日まであと7日！", "tryWidget": "👆 矢印かベルをタップ", "nudgeNotifBday": "ママの誕生日について"}, "sv": {"nudgeReminder": "🎂 Mammas födelsedag om 7 dagar!", "tryWidget": "👆 Tryck på pilarna eller klockan", "nudgeNotifBday": "Om mammas födelsedag"}, "da": {"nudgeReminder": "🎂 Mors fødselsdag om 7 dage!", "tryWidget": "👆 Tryk på pilene eller klokken", "nudgeNotifBday": "Om mors fødselsdag"}, "nb": {"nudgeReminder": "🎂 Mammas bursdag om 7 dager!", "tryWidget": "👆 Trykk på pilene eller bjella", "nudgeNotifBday": "Om mammas bursdag"}, "tr": {"nudgeReminder": "🎂 Annenin doğum gününe 7 gün!", "tryWidget": "👆 Oklara veya zile dokun", "nudgeNotifBday": "Annenin doğum günü hakkında"}, "pl": {"nudgeReminder": "🎂 Urodziny mamy za 7 dni!", "tryWidget": "👆 Dotknij strzałek lub dzwonka", "nudgeNotifBday": "O urodzinach mamy"}};
   for(const l in EXTRA4){T[l]=Object.assign(T[l]||{},EXTRA4[l]);}
 
 
@@ -793,13 +798,18 @@
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeQR(); });
   document.querySelectorAll('a.store, a.nav-cta').forEach(a=>a.addEventListener('click',openQR));
 
-  // Widget demo: arrows cycle through events
+  // Widget demo: arrows cycle through events (photo follows the event)
   (function(){
-    const WD=[{e:'✈️',t:'Trip to Tokyo',n:'42'},{e:'🎂',t:"Mom's Birthday",n:'7'},{e:'💍',t:'The Wedding',n:'120'},{e:'🏖️',t:'Summer Break',n:'300'}];
+    const WD=[
+      {e:'✈️',t:'Trip to Tokyo',n:'42',img:'tokyo,tower,skyline'},
+      {e:'🎂',t:"Mom's Birthday",n:'7',img:'birthday,cake'},
+      {e:'💍',t:'The Wedding',n:'120',img:'wedding,celebration'},
+      {e:'🏖️',t:'Summer Break',n:'300',img:'nice,france,sea'}
+    ];
     let i=0;
-    const top=document.getElementById('wdTop'),num=document.getElementById('wdNum'),bell=document.getElementById('wdBell');
+    const top=document.getElementById('wdTop'),num=document.getElementById('wdNum'),bell=document.getElementById('wdBell'),img=document.getElementById('wdImg');
     const prev=document.getElementById('wdPrev'),next=document.getElementById('wdNext');
-    function render(){ if(!top)return; const x=WD[i]; top.textContent=x.e+' '+x.t; num.textContent=x.n; if(bell)bell.dataset.emoji=x.e; }
+    function render(){ if(!top)return; const x=WD[i]; top.textContent=x.e+' '+x.t; num.textContent=x.n; if(bell)bell.dataset.emoji=x.e; if(img){img.style.display=''; img.src='https://loremflickr.com/440/300/'+x.img;} }
     if(prev)prev.addEventListener('click',()=>{i=(i-1+WD.length)%WD.length;render();});
     if(next)next.addEventListener('click',()=>{i=(i+1)%WD.length;render();});
     render();
