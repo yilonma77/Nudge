@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nudge — Count down to what matters, together</title>
-<meta name="description" content="Nudge is a shared countdown app. Count the days to birthdays, trips and big moments with friends — and give them a little nudge along the way." />
+<title>Nudge · Count down to what matters, together</title>
+<meta name="description" content="Nudge is a shared countdown app. Count the days to birthdays, trips and big moments with friends, and give them a little nudge along the way." />
 <style>
   :root{
     --sky:#4D8DFF; --violet:#8B5CF6; --rose:#FF6B6B; --coral:#FF8A65;
@@ -36,7 +36,7 @@
   @media(max-width:860px){.nav-links{display:none}}
 
   /* Hero */
-  .hero{position:relative;overflow:hidden;background:var(--grad);color:#fff;padding:74px 0 92px}
+  .hero{position:relative;overflow:hidden;background:var(--grad);color:#fff;padding:60px 0 76px}
   .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;position:relative;z-index:2}
   .badge-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:22px}
   .hero h1{font-size:52px;line-height:1.05;letter-spacing:-.03em;font-weight:850;margin-bottom:18px}
@@ -79,10 +79,10 @@
   }
 
   /* Sections */
-  section.block{padding:84px 0}
+  section.block{padding:60px 0}
   .eyebrow{color:var(--violet);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-align:center}
   .h2{font-size:38px;font-weight:850;letter-spacing:-.025em;text-align:center;margin:10px auto 14px;max-width:20ch}
-  .sub{color:var(--muted);text-align:center;font-size:18px;max-width:56ch;margin:0 auto 50px}
+  .sub{color:var(--muted);text-align:center;font-size:18px;max-width:56ch;margin:0 auto 38px}
 
   .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   @media(max-width:900px){.feature-grid{grid-template-columns:1fr 1fr}}
@@ -140,7 +140,9 @@
      linear-gradient(90deg,transparent 46%,rgba(255,255,255,.6) 46%,rgba(255,255,255,.6) 52%,transparent 52%),
      linear-gradient(0deg,transparent 60%,rgba(255,255,255,.5) 60%,rgba(255,255,255,.5) 64%,transparent 64%)}
   .maps .pin{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:20px}
-  .maps-embed{width:100%;height:80px;border:0;border-radius:14px;margin-top:10px;pointer-events:none}
+  .maps-embed{position:relative;width:100%;height:84px;border-radius:14px;margin-top:10px;overflow:hidden;background:#cfe3d6}
+  .maps-embed img{width:100%;height:100%;object-fit:cover;display:block}
+  .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-62%);font-size:22px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
 
   /* Steps */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
@@ -244,6 +246,57 @@
   .qr-wrap{width:200px;height:200px;margin:18px auto 10px;border-radius:16px;background:linear-gradient(135deg,#eef1fb,#f7f4ff);display:grid;place-items:center;overflow:hidden;border:1px solid rgba(0,0,0,.06)}
   .qr-wrap img{width:100%;height:100%;object-fit:contain;padding:10px}
   .qr-soon{font-size:12.5px!important;margin-top:8px;color:var(--violet)!important;font-weight:600}
+
+  /* Lock Screen mockup with a live nudge bell */
+  .ls-phone{width:244px;max-width:100%;height:330px;margin:0 auto;background:#0b0b12;border-radius:40px;position:relative;box-shadow:0 26px 60px rgba(20,10,60,.4);overflow:hidden;border:2px solid rgba(255,255,255,.07)}
+  .ls-wall{position:absolute;inset:0;background:linear-gradient(170deg,#2a1a5e,#5a2e8e 55%,#9a4fae)}
+  .ls-phone .island{top:14px;min-width:172px;padding:0 12px;height:34px;animation:none}
+  .ls-time{position:absolute;top:62px;left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:58px;letter-spacing:1px;font-variant-numeric:tabular-nums}
+  .ls-date{position:absolute;top:128px;left:0;right:0;text-align:center;color:rgba(255,255,255,.78);font-size:13px;font-weight:600}
+  .ls-widget{position:absolute;left:16px;right:16px;bottom:56px;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:11px 13px;display:flex;align-items:center;gap:10px}
+  .lsw-left{flex:1;min-width:0;color:#fff}
+  .lsw-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lsw-count{font-size:12px;opacity:.9}.lsw-count b{font-size:20px;font-weight:850}
+  .ls-bell{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.28);display:grid;place-items:center;flex:none;border:0;cursor:pointer;transition:transform .12s}
+  .ls-bell:active{transform:scale(.86)}
+  .ls-bell svg{width:18px;height:18px;color:#fff}
+  .ls-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.92);font-size:12px;font-weight:700;animation:bob 1.7s ease-in-out infinite;pointer-events:none}
+  /* Lock-screen notification (like the app's nudge alert) */
+  .ls-notif{position:absolute;left:14px;right:14px;bottom:44px;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+  .ls-notif .ai{width:32px;height:32px;border-radius:8px;background:var(--grad);display:grid;place-items:center;flex:none}
+  .ls-notif .ai svg{width:17px;height:17px;color:#fff}
+  .ls-notif .nb{flex:1;min-width:0;text-align:left}
+  .ls-notif .top{display:flex;justify-content:space-between;font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .ls-notif .msg{font-size:13px;font-weight:700;color:#15151c;margin-top:1px;line-height:1.25}
+  .ls-notif .ctx{font-size:11.5px;color:#666}
+
+  /* Home Screen mockup with the Nudge widget + bell */
+  .hs-phone{width:244px;max-width:100%;height:330px;margin:0 auto;background:#0b0b12;border-radius:40px;position:relative;box-shadow:0 26px 60px rgba(20,10,60,.4);overflow:hidden;border:2px solid rgba(255,255,255,.07)}
+  .hs-wall{position:absolute;inset:0;background:linear-gradient(160deg,#ffd6a8,#ff9ec9 52%,#a98cff)}
+  .hs-time{position:absolute;top:16px;left:0;right:0;text-align:center;color:#fff;font-weight:700;font-size:14px;opacity:.95}
+  .hs-widget{position:absolute;left:18px;right:18px;top:52px;height:132px;border-radius:22px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:13px 14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 14px 30px rgba(80,60,160,.35)}
+  .hsw-top{font-size:14px;font-weight:800}
+  .hsw-big{font-size:12px;font-weight:700;opacity:.92}
+  .hsw-big b{font-size:36px;font-weight:850;margin-right:5px;vertical-align:-2px}
+  .hsw-controls{display:flex;align-items:center;justify-content:space-between}
+  .hsw-chev{font-size:26px;color:rgba(255,255,255,.85);line-height:1;border:0;background:transparent;cursor:pointer;padding:0 6px;transition:transform .12s}
+  .hsw-chev:active{transform:scale(.8)}
+  .hs-bell{width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;border:0;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.2);transition:transform .12s}
+  .hs-bell:active{transform:scale(.86)}
+  .hs-bell svg{width:20px;height:20px;color:#4D8DFF}
+  .hs-dock{position:absolute;left:0;right:0;bottom:18px;display:flex;gap:13px;justify-content:center}
+  .hs-dock span{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.4)}
+  .scr-label{margin-top:12px;font-size:13px;font-weight:700;color:var(--muted)}
+  .map-label{position:absolute;left:8px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px}
+
+  /* Standalone widget + Dynamic Island bar (no phone frame) */
+  .di-bar{background:#000;border-radius:999px;display:inline-flex;align-items:center;gap:10px;padding:9px 16px;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+  .di-bar .di-emoji{font-size:16px}
+  .di-bar .di-count{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;letter-spacing:.4px}
+  .di-bar .di-ring{width:18px;height:18px;border-radius:50%;border:2.4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin 1.5s linear infinite}
+  .widget-demo{width:202px;max-width:100%;border-radius:22px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;gap:11px;box-shadow:0 16px 36px rgba(80,60,160,.32);position:relative}
+  .widget-demo .hsw-big b{font-size:30px}
+  .try-hint{font-size:13px;font-weight:700;color:var(--muted);animation:bob 1.7s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -257,7 +310,7 @@
     <h3 data-i18n="qrTitle">Coming soon</h3>
     <p data-i18n="qrSub">Scan with your iPhone to download Nudge.</p>
     <div class="qr-wrap"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data=https%3A%2F%2Fnudge.app" alt="QR code" loading="lazy" onerror="this.style.display='none'"></div>
-    <p class="qr-soon" data-i18n="qrNote">Download links aren't live yet — they'll appear here at launch.</p>
+    <p class="qr-soon" data-i18n="qrNote">Download links aren't live yet. They'll appear here at launch.</p>
   </div>
 </div>
 
@@ -302,7 +355,7 @@
   <div class="wrap">
     <div>
       <span class="badge-pill" data-i18n="heroBadge">Shared countdowns for the moments that matter</span>
-      <h1 data-i18n="heroH1">Count down to what matters — together.</h1>
+      <h1 data-i18n="heroH1">Count down to what matters, together.</h1>
       <p class="lead" data-i18n="heroLead">Track birthdays, trips and big days with friends, and give them a little nudge as the day gets close.</p>
       <div class="stores" id="get">
         <a class="store" href="#"><span class="as">{APPLE}</span><span><small data-i18n="storeDownload">Download on the</small><strong>App Store</strong></span></a>
@@ -327,7 +380,6 @@
           </div>
           <div class="mini-card cover">
             <div class="cov">{CAKE}</div>
-            <div class="card-fx"><span style="left:16%;animation-delay:0s">🎂</span><span style="left:40%;animation-delay:1.1s">🎈</span><span style="left:63%;animation-delay:.5s">🎉</span><span style="left:82%;animation-delay:1.8s">✨</span></div>
             <div class="l"><span class="chip">🎂 Birthday</span><div class="t">Mom's Birthday</div><div class="d" data-i18n="phYearly">Repeats yearly</div></div>
             <div class="num"><b>7</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
             <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
@@ -355,13 +407,13 @@
   <div class="wrap">
     <p class="eyebrow" data-i18n="featEyebrow">Why Nudge</p>
     <h2 class="h2" data-i18n="featH2">Anticipation is better shared</h2>
-    <p class="sub" data-i18n="featSub">Everything you need to count down to the big days — and bring your people along for the wait.</p>
+    <p class="sub" data-i18n="featSub">Everything you need to count down to the big days, and bring your people along for the wait.</p>
     <div class="feature-grid">
       <div class="feature"><div class="ic" style="background:rgba(77,141,255,.14)">👥</div><h3 data-i18n="f1t">Shared countdowns</h3><p data-i18n="f1d">Invite friends with a link or code so everyone watches the same day approach.</p></div>
       <div class="feature"><div class="ic" style="background:rgba(255,107,107,.14)">🔔</div><h3 data-i18n="f2t">Send a nudge</h3><p data-i18n="f2d">Tap the bell to give someone a little wave. Add an emoji or a quick message.</p></div>
-      <div class="feature"><div class="ic" style="background:rgba(139,92,246,.14)">📱</div><h3 data-i18n="f3t">Widgets everywhere</h3><p data-i18n="f3d">Home and Lock Screen widgets keep the next day a glance away — nudge right from them.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(139,92,246,.14)">📱</div><h3 data-i18n="f3t">Widgets everywhere</h3><p data-i18n="f3d">Home and Lock Screen widgets keep the next day a glance away, with nudges right from them.</p></div>
       <div class="feature"><div class="ic" style="background:rgba(251,191,36,.16)">⏱️</div><h3 data-i18n="f4t">Live Activities</h3><p data-i18n="f4d">Watch the final hours tick down on the Lock Screen and in the Dynamic Island.</p></div>
-      <div class="feature"><div class="ic" style="background:rgba(52,211,153,.16)">🎂</div><h3 data-i18n="f5t">Recurring events</h3><p data-i18n="f5d">Birthdays and anniversaries roll over automatically — weekly and monthly too.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(52,211,153,.16)">🎂</div><h3 data-i18n="f5t">Recurring events</h3><p data-i18n="f5d">Birthdays and anniversaries roll over automatically, plus weekly and monthly.</p></div>
       <div class="feature"><div class="ic" style="background:rgba(255,138,101,.16)">🗓️</div><h3 data-i18n="f6t">From your Calendar</h3><p data-i18n="f6d">Turn a calendar event into a countdown in a tap, with smart category guesses.</p></div>
     </div>
   </div>
@@ -406,11 +458,12 @@
   <div class="wrap">
     <p class="eyebrow" data-i18n="detailEyebrow">A closer look</p>
     <h2 class="h2" data-i18n="detailH2">Every countdown, beautifully</h2>
-    <p class="sub" data-i18n="detailSub">Open one for the full picture — a live count, members, a wall of nudges and reactions, the place on a map, and surprises that unlock on the day.</p>
+    <p class="sub" data-i18n="detailSub">Open one for the full picture: a live count, members, a wall of nudges and reactions, the place on a map, and surprises that unlock on the day.</p>
     <div class="phone" style="margin:0 auto" aria-hidden="true">
       <div class="notch"></div>
       <div class="screen" style="padding-top:44px">
         <div class="detail-hero">
+          <div class="card-fx"><span style="left:12%;animation-delay:0s">🎂</span><span style="left:30%;animation-delay:1.3s">🎈</span><span style="left:55%;animation-delay:.6s">🎉</span><span style="left:74%;animation-delay:2s">✨</span><span style="left:88%;animation-delay:1s">🥳</span></div>
           <div class="chips"><span class="chip">🎂 <span data-i18n="catBirthday">Birthday</span></span><span class="chip">📍 New York</span></div>
           <div class="bigemoji">🎂</div>
           <div class="big">7</div>
@@ -438,25 +491,12 @@
           <span class="g">🎁</span>
           <div><div class="rt" data-i18n="revealTitle">2 surprises hidden</div><div class="rs" data-i18n="revealSub">Unlocks on the day</div></div>
         </div>
-        <iframe class="maps-embed" loading="lazy" title="New York" src="https://www.openstreetmap.org/export/embed.html?bbox=-74.010%2C40.740%2C-73.958%2C40.772&layer=mapnik&marker=40.758%2C-73.985"></iframe>
+        <div class="maps-embed" role="img" aria-label="New York"><img src="https://tile.openstreetmap.org/12/1206/1539.png" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'"><span class="map-pin">📍</span><span class="map-label">New York</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- How it works -->
-<section class="block alt" id="how">
-  <div class="wrap">
-    <p class="eyebrow" data-i18n="howEyebrow">How it works</p>
-    <h2 class="h2" data-i18n="howH2">Three taps to the countdown</h2>
-    <p class="sub" data-i18n="howSub">No account needed to start. Add a day, make it yours, and share it.</p>
-    <div class="steps">
-      <div class="step"><h3 data-i18n="s1t">Create a countdown</h3><p data-i18n="s1d">Pick a date and add an emoji, color, photo, location and reminders.</p></div>
-      <div class="step"><h3 data-i18n="s2t">Share it</h3><p data-i18n="s2d">Send a link or 6-digit code so friends can follow along — AirDrop works too.</p></div>
-      <div class="step"><h3 data-i18n="s3t">Nudge &amp; celebrate</h3><p data-i18n="s3d">Get reminded, nudge each other, and watch the confetti land on the day.</p></div>
-    </div>
-  </div>
-</section>
 
 <!-- Home & Lock Screen: widgets + Dynamic Island + swipe -->
 <section class="block" id="widgets">
@@ -464,58 +504,81 @@
     <p class="eyebrow" data-i18n="demoEyebrow">See it in action</p>
     <h2 class="h2" data-i18n="widH2">Always one glance away</h2>
     <p class="sub" data-i18n="demoSub">A widget on your Home or Lock Screen, the final countdown live in the Dynamic Island, and a swipe to add any countdown to your Calendar.</p>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:36px">
-      <div style="width:120px;height:120px;border-radius:26px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 38px rgba(80,60,160,.3)">
-        <div style="font-size:13px;font-weight:700">✈️ Tokyo</div>
-        <div><div style="font-size:34px;font-weight:850;line-height:1">42</div><div style="font-size:10px;font-weight:700;opacity:.9" data-i18n="lblDaysLeft">DAYS LEFT</div></div>
-      </div>
-      <div style="width:120px;height:120px;border-radius:26px;background:linear-gradient(135deg,#FF6B6B,#FF8A65);color:#fff;padding:14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 38px rgba(255,107,107,.3)">
-        <div style="font-size:13px;font-weight:700">🎂 Mom</div>
-        <div><div style="font-size:34px;font-weight:850;line-height:1">7</div><div style="font-size:10px;font-weight:700;opacity:.9" data-i18n="lblDaysLeft">DAYS LEFT</div></div>
-      </div>
-    </div>
     <div class="demo-grid">
-      <div class="di-phone">
-        <div class="di-wall"></div>
-        <div class="island"><span class="di-emoji">🎂</span><span class="di-count" id="diCount">11:59:58</span><span class="di-ring"></span></div>
-        <div class="di-time" id="diTime">09:41</div>
-        <div class="di-date">Mom's Birthday · 27 Jun</div>
-      </div>
-      <div>
-        <div class="swipe-demo">
-          <div class="swipe-actions">
-            <div class="sa" style="background:#3478f6">{CALPLUS}</div>
-            <div class="sa" style="background:#8e8e93">{ARCHIVE}</div>
-            <div class="sa" style="background:#ff3b30">{TRASH}</div>
-          </div>
-          <div class="swipe-row">
-            <div class="mini-card cover" style="margin:0;border-radius:18px">
-              <div class="cov">{TOKYO}<img class="photo" src="https://loremflickr.com/640/260/tokyo,tower,skyline" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
-              <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
-              <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+      <div style="text-align:center">
+        <div class="ls-phone">
+          <div class="ls-wall"></div>
+          <div class="island"><span class="di-emoji">🎂</span><span class="di-count" id="diCount">11:59:58</span><span class="di-ring"></span></div>
+          <div class="ls-time" id="diTime">9:41</div>
+          <div class="ls-date">Saturday, 27 June</div>
+          <div class="ls-notif">
+            <div class="ai">{BELL}</div>
+            <div class="nb">
+              <div class="top"><span>Nudge</span><span data-i18n="phNow">now</span></div>
+              <div class="msg" data-i18n="nudgeReminder">🎂 Mom's Birthday is in 7 days!</div>
             </div>
           </div>
         </div>
-        <p class="swipe-cap" data-i18n="swipeCap">Swipe left to add to Calendar, archive, or delete.</p>
+        <div class="scr-label" data-i18n="scrLock">Lock Screen</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div class="widget-demo">
+          <div class="hsw-top" id="wdTop">✈️ Trip to Tokyo</div>
+          <div class="hsw-big"><b id="wdNum">42</b><span data-i18n="lblDaysLeft">DAYS LEFT</span></div>
+          <div class="hsw-controls">
+            <button class="hsw-chev" id="wdPrev" aria-label="Previous">‹</button>
+            <button class="hs-bell" data-nudge id="wdBell" data-emoji="✈️" aria-label="Nudge">{BELLW}</button>
+            <button class="hsw-chev" id="wdNext" aria-label="Next">›</button>
+          </div>
+        </div>
+        <div class="try-hint" data-i18n="tryWidget">👇 Tap the arrows or the bell</div>
       </div>
     </div>
-    <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:24px" data-i18n="widP2">Set how often the Lock Screen rotates — every 15 minutes, hourly, or off.</p>
+    <div style="margin-top:34px">
+      <div class="swipe-demo">
+        <div class="swipe-actions">
+          <div class="sa" style="background:#3478f6">{CALPLUS}</div>
+          <div class="sa" style="background:#8e8e93">{ARCHIVE}</div>
+          <div class="sa" style="background:#ff3b30">{TRASH}</div>
+        </div>
+        <div class="swipe-row">
+          <div class="mini-card cover" style="margin:0;border-radius:18px">
+            <div class="cov">{TOKYO}<img class="photo" src="https://loremflickr.com/640/260/tokyo,tower,skyline" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
+            <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
+            <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+          </div>
+        </div>
+      </div>
+      <p class="swipe-cap" data-i18n="swipeCap">Swipe left to add to Calendar, archive, or delete.</p>
+    </div>
+    <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:24px" data-i18n="widP2">Choose which countdowns appear and how often they rotate: every 15 minutes, hourly, or off.</p>
   </div>
 </section>
 
-<!-- Calendar band -->
-<section class="block alt">
-  <div class="wrap split">
-    <div>
-      <h2 data-i18n="calH2">Start from your Calendar</h2>
-      <p data-i18n="calP">Already have the date saved? Import a calendar event in a tap — Nudge even guesses the category.</p>
+
+<!-- How it works + start from Calendar -->
+<section class="block alt" id="how">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="howEyebrow">How it works</p>
+    <h2 class="h2" data-i18n="howH2">Three taps to the countdown</h2>
+    <p class="sub" data-i18n="howSub">No account needed to start. Add a day, make it yours, and share it.</p>
+    <div class="steps">
+      <div class="step"><h3 data-i18n="s1t">Create a countdown</h3><p data-i18n="s1d">Pick a date and add an emoji, color, photo, location and reminders.</p></div>
+      <div class="step"><h3 data-i18n="s2t">Share it</h3><p data-i18n="s2d">Send a link or 6-digit code so friends can follow along. AirDrop works too.</p></div>
+      <div class="step"><h3 data-i18n="s3t">Nudge &amp; celebrate</h3><p data-i18n="s3d">Get reminded, nudge each other, and watch the confetti land on the day.</p></div>
     </div>
-    <div style="display:grid;place-items:center">
-      <div class="calsheet">
-        <div class="ch">🗓️ <span data-i18n="calSheet">From Calendar</span></div>
-        <div class="calrow"><div class="datebadge"><small>Oct</small><b>12</b></div><div class="ci"><b>Trip to Tokyo</b><small data-i18n="calRow1">in 6 weeks · 09:30</small></div><div class="plus">+</div></div>
-        <div class="calrow"><div class="datebadge"><small>Jun</small><b>27</b></div><div class="ci"><b>Mom's Birthday</b><small data-i18n="calRow2">in 7 days</small></div><div class="plus">+</div></div>
-        <div class="calrow"><div class="datebadge"><small>Feb</small><b>08</b></div><div class="ci"><b>The Wedding</b><small data-i18n="calRow3">next year</small></div><div class="plus">+</div></div>
+    <div class="split" style="margin-top:44px;align-items:center">
+      <div>
+        <h2 data-i18n="calH2">Start from your Calendar</h2>
+        <p data-i18n="calP">Already have the date saved? Import a calendar event in a tap, and Nudge even guesses the category.</p>
+      </div>
+      <div style="display:grid;place-items:center">
+        <div class="calsheet">
+          <div class="ch">🗓️ <span data-i18n="calSheet">From Calendar</span></div>
+          <div class="calrow"><div class="datebadge"><small>Oct</small><b>12</b></div><div class="ci"><b>Trip to Tokyo</b><small data-i18n="calRow1">in 6 weeks · 09:30</small></div><div class="plus">+</div></div>
+          <div class="calrow"><div class="datebadge"><small>Jun</small><b>27</b></div><div class="ci"><b>Mom's Birthday</b><small data-i18n="calRow2">in 7 days</small></div><div class="plus">+</div></div>
+          <div class="calrow"><div class="datebadge"><small>Feb</small><b>08</b></div><div class="ci"><b>The Wedding</b><small data-i18n="calRow3">next year</small></div><div class="plus">+</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -527,9 +590,9 @@
     <p class="eyebrow" data-i18n="privEyebrow">Privacy</p>
     <h2 class="h2" data-i18n="privH2">Your countdowns stay yours</h2>
     <div class="priv-grid">
-      <div class="pcard"><div class="ic">🔒</div><p data-i18n="privP1">Your data syncs privately through your own iCloud, protected by Apple’s encryption — we can’t read it.</p></div>
+      <div class="pcard"><div class="ic">🔒</div><p data-i18n="privP1">Your data syncs privately through your own iCloud, protected by Apple’s encryption, so we can’t read it.</p></div>
       <div class="pcard"><div class="ic">⏲️</div><p data-i18n="privP2">Share codes expire after 15 minutes, so old invites can’t be reused.</p></div>
-      <div class="pcard"><div class="ic">👀</div><p data-i18n="privP3">You always see exactly who’s in a shared countdown — and can leave anytime.</p></div>
+      <div class="pcard"><div class="ic">👀</div><p data-i18n="privP3">You always see exactly who’s in a shared countdown, and can leave anytime.</p></div>
     </div>
   </div>
 </section>
@@ -539,7 +602,7 @@
   <div class="wrap" style="text-align:center">
     <p class="eyebrow" data-i18n="langsEyebrow">Worldwide</p>
     <h2 class="h2" data-i18n="langsBandH2">Nudge speaks your language</h2>
-    <p class="sub" data-i18n="langsBandSub">Fully localized in 15 languages — so the countdown feels right wherever your friends are.</p>
+    <p class="sub" data-i18n="langsBandSub">Fully localized in 15 languages, so the countdown feels right wherever your friends are.</p>
     <div style="font-size:17px;font-weight:600;color:var(--muted);line-height:2.3;max-width:780px;margin:0 auto">English · Français · Español · Italiano · Deutsch · Português · 中文 · 繁體中文 · 한국어 · 日本語 · Svenska · Dansk · Norsk · Türkçe · Polski</div>
   </div>
 </section>
@@ -548,7 +611,7 @@
 <section style="padding:30px 0 86px"><div class="wrap" style="padding:0">
   <div class="cta">
     <h2 data-i18n="ctaH2">Start your first countdown</h2>
-    <p data-i18n="ctaP">Free to download. Count down to the next great day — together.</p>
+    <p data-i18n="ctaP">Free to download. Count down to the next great day, together.</p>
     <div class="stores">
       <a class="store" href="#"><span>{APPLE}</span><span><small data-i18n="storeDownload">Download on the</small><strong>App Store</strong></span></a>
       <a class="store soon" href="#"><span>{PLAY}</span><span><small data-i18n="storeSoon">Coming soon to</small><strong>Google Play</strong></span></a>
@@ -622,6 +685,12 @@
   for(const l in EXTRA){T[l]=Object.assign(T[l]||{},EXTRA[l]);}
   const EXTRA2={"sv": {"calH2": "Börja från din kalender", "calP": "Har du redan datumet sparat? Importera en kalenderhändelse med ett tryck — Nudge gissar till och med kategorin.", "calRow1": "om 6 veckor · 09:30", "calRow2": "om 7 dagar", "calRow3": "nästa år", "calSheet": "Från kalender", "catBirthday": "Födelsedag", "ctaH2": "Skapa din första nedräkning", "ctaP": "Gratis att ladda ner. Räkna ner till nästa stora dag — tillsammans.", "demoEyebrow": "Se det i praktiken", "demoSub": "En widget på hem- eller låsskärmen, det sista varvet live i Dynamic Island, och ett svep för att lägga till en nedräkning i kalendern.", "detailEyebrow": "Närmare titt", "detailH2": "Varje nedräkning, vacker", "detailSub": "Öppna en för hela bilden — live-räkning, medlemmar, en vägg av nudges och reaktioner, platsen på en karta, och överraskningar som låses upp på dagen.", "f1d": "Bjud in vänner med en länk eller kod så att alla ser samma dag närma sig.", "f1t": "Delade nedräkningar", "f2d": "Tryck på klockan för att vinka till någon. Lägg till en emoji eller ett kort meddelande.", "f2t": "Skicka en nudge", "f3d": "Widgetar på hem- och låsskärmen håller nästa dag inom synhåll — nudga direkt därifrån.", "f3t": "Widgetar överallt", "f4d": "Se de sista timmarna ticka ner på låsskärmen och i Dynamic Island.", "f4t": "Live-aktiviteter", "f5d": "Födelsedagar och årsdagar förnyas automatiskt — även varje vecka och månad.", "f5t": "Återkommande händelser", "f6d": "Förvandla en kalenderhändelse till en nedräkning med ett tryck, med smarta kategoriförslag.", "f6t": "Från din kalender", "featEyebrow": "Varför Nudge", "featH2": "Förväntan är bättre delad", "featSub": "Allt du behöver för att räkna ner till de stora dagarna — med dina nära.", "footContact": "Kontakt", "footPrivacy": "Integritet", "footSupport": "Hjälp", "heroBadge": "Delade nedräkningar för stunderna som betyder något", "heroH1": "Räkna ner till det som betyder något — tillsammans.", "heroLead": "Följ födelsedagar, resor och stora dagar med vänner och ge dem en liten nudge när dagen närmar sig.", "heroNote": "iPhone-widgetar · Låsskärm · Live-aktiviteter · 15 språk", "howEyebrow": "Så funkar det", "howH2": "Tre tryck till nedräkningen", "howSub": "Inget konto behövs för att börja. Lägg till en dag, gör den till din och dela den.", "langsBandH2": "Nudge talar ditt språk", "langsBandSub": "Fullt översatt till 15 språk — så att nedräkningen känns rätt var dina vänner än är.", "langsEyebrow": "Världen över", "lblDaysLeft": "DAGAR KVAR", "lblMembers": "Medlemmar", "lblNudges": "Nudges", "lblToGo": "KVAR", "nMsg1": "Kan inte vänta!! ✈️", "nMsg2": "7 dagar kvar 🥳", "navFeatures": "Funktioner", "navGet": "Hämta appen", "navHow": "Så funkar det", "navPrivacy": "Integritet", "navWidgets": "Widgetar", "nudgeH2": "Ett tryck för att säga ”jag räknar också ner”.", "nudgeNotif": "👋 Alex nudgade dig", "nudgeNotifCtx": "Om Tokyoresa", "nudgeP1": "En nudge är en liten glad signal mellan vänner. Reagera med emoji, svara, eller lämna en överraskning som låses upp på dagen.", "nudgeP2": "Privat från grunden: dina nedräkningar finns på din enhet, delas bara när du vill.", "phHome": "Kommande", "phNow": "nu", "phYearly": "Upprepas årligen", "privEyebrow": "Integritet", "privH2": "Dina nedräkningar förblir dina", "privP1": "Dina data synkas privat via din egen iCloud, skyddade av Apples kryptering — vi kan inte läsa dem.", "privP2": "Delningskoder upphör efter 15 minuter, så gamla inbjudningar kan inte återanvändas.", "privP3": "Du ser alltid exakt vilka som är med i en delad nedräkning — och kan lämna när som helst.", "qrNote": "Nedladdningslänkarna är inte aktiva än — de visas här vid lanseringen.", "qrSub": "Skanna med din iPhone för att ladda ner Nudge.", "qrTitle": "Kommer snart", "reactHint": "Tryck på en reaktion", "revealSub": "Låses upp på dagen", "revealTitle": "2 överraskningar dolda", "s1d": "Välj ett datum och lägg till emoji, färg, foto, plats och påminnelser.", "s1t": "Skapa en nedräkning", "s2d": "Skicka en länk eller 6-siffrig kod så att vänner kan följa med — AirDrop funkar också.", "s2t": "Dela den", "s3d": "Bli påmind, nudga varandra och se konfettin falla på dagen.", "s3t": "Nudga och fira", "sentMsg": "Nudge skickad!", "storeDownload": "Ladda ner på", "storeSoon": "Kommer snart till", "swipeCap": "Svep åt vänster för kalender, arkivera eller radera.", "tryIt": "Testa!", "tryNudge": "👇 Tryck på en klocka för att skicka en nudge", "widH2": "Alltid inom synhåll", "widP2": "Välj hur ofta låsskärmen växlar — var 15:e minut, varje timme eller av."}, "da": {"calH2": "Start fra din kalender", "calP": "Har du allerede datoen gemt? Importér en kalenderbegivenhed med ét tryk — Nudge gætter endda kategorien.", "calRow1": "om 6 uger · 09:30", "calRow2": "om 7 dage", "calRow3": "næste år", "calSheet": "Fra kalender", "catBirthday": "Fødselsdag", "ctaH2": "Opret din første nedtælling", "ctaP": "Gratis at downloade. Tæl ned til den næste store dag — sammen.", "demoEyebrow": "Se det i praksis", "demoSub": "En widget på hjemme- eller låseskærmen, den sidste nedtælling live i Dynamic Island, og et swipe for at føje en nedtælling til kalenderen.", "detailEyebrow": "Tættere på", "detailH2": "Hver nedtælling, smukt", "detailSub": "Åbn én for det fulde billede — live-tæller, medlemmer, en væg af nudges og reaktioner, stedet på et kort, og overraskelser, der låses op på dagen.", "f1d": "Inviter venner med et link eller en kode, så alle ser den samme dag nærme sig.", "f1t": "Delte nedtællinger", "f2d": "Tryk på klokken for at vinke til nogen. Tilføj en emoji eller en kort besked.", "f2t": "Send en nudge", "f3d": "Widgets på hjemme- og låseskærmen holder næste dag inden for rækkevidde — nudge direkte derfra.", "f3t": "Widgets overalt", "f4d": "Se de sidste timer tælle ned på låseskærmen og i Dynamic Island.", "f4t": "Live-aktiviteter", "f5d": "Fødselsdage og jubilæer fornyes automatisk — også hver uge og måned.", "f5t": "Tilbagevendende begivenheder", "f6d": "Lav en kalenderbegivenhed om til en nedtælling med ét tryk, med smarte kategoriforslag.", "f6t": "Fra din kalender", "featEyebrow": "Hvorfor Nudge", "featH2": "Forventning er bedre delt", "featSub": "Alt hvad du behøver for at tælle ned til de store dage — med dine nærmeste.", "footContact": "Kontakt", "footPrivacy": "Privatliv", "footSupport": "Hjælp", "heroBadge": "Delte nedtællinger til de øjeblikke, der betyder noget", "heroH1": "Tæl ned til det, der betyder noget — sammen.", "heroLead": "Følg fødselsdage, rejser og store dage med venner, og giv dem en lille nudge, når dagen nærmer sig.", "heroNote": "iPhone-widgets · Låseskærm · Live-aktiviteter · 15 sprog", "howEyebrow": "Sådan virker det", "howH2": "Tre tryk til nedtællingen", "howSub": "Ingen konto nødvendig for at starte. Tilføj en dag, gør den til din, og del den.", "langsBandH2": "Nudge taler dit sprog", "langsBandSub": "Fuldt oversat til 15 sprog — så nedtællingen føles rigtig, uanset hvor dine venner er.", "langsEyebrow": "Verden over", "lblDaysLeft": "DAGE TILBAGE", "lblMembers": "Medlemmer", "lblNudges": "Nudges", "lblToGo": "TILBAGE", "nMsg1": "Kan ikke vente!! ✈️", "nMsg2": "7 dage tilbage 🥳", "navFeatures": "Funktioner", "navGet": "Hent appen", "navHow": "Sådan virker det", "navPrivacy": "Privatliv", "navWidgets": "Widgets", "nudgeH2": "Ét tryk for at sige ”jeg tæller også ned”.", "nudgeNotif": "👋 Alex nudgede dig", "nudgeNotifCtx": "Om Tokyo-tur", "nudgeP1": "En nudge er et lille glad vink mellem venner. Reagér med emoji, send en tilbage, eller efterlad en overraskelse, der låses op på dagen.", "nudgeP2": "Privat fra bunden: dine nedtællinger ligger på din enhed og deles kun, når du vil.", "phHome": "Kommende", "phNow": "nu", "phYearly": "Gentages årligt", "privEyebrow": "Privatliv", "privH2": "Dine nedtællinger forbliver dine", "privP1": "Dine data synkroniseres privat via din egen iCloud, beskyttet af Apples kryptering — vi kan ikke læse dem.", "privP2": "Delingskoder udløber efter 15 minutter, så gamle invitationer kan ikke genbruges.", "privP3": "Du kan altid se præcis, hvem der er med i en delt nedtælling — og kan forlade den når som helst.", "qrNote": "Download-links er ikke aktive endnu — de vises her ved lanceringen.", "qrSub": "Scan med din iPhone for at downloade Nudge.", "qrTitle": "Kommer snart", "reactHint": "Tryk på en reaktion", "revealSub": "Låses op på dagen", "revealTitle": "2 overraskelser skjult", "s1d": "Vælg en dato og tilføj emoji, farve, billede, sted og påmindelser.", "s1t": "Opret en nedtælling", "s2d": "Send et link eller en 6-cifret kode, så venner kan følge med — AirDrop virker også.", "s2t": "Del den", "s3d": "Bliv mindet, nudge hinanden, og se konfettien falde på dagen.", "s3t": "Nudge og fejr", "sentMsg": "Nudge sendt!", "storeDownload": "Hent i", "storeSoon": "Kommer snart til", "swipeCap": "Swipe til venstre for kalender, arkivér eller slet.", "tryIt": "Prøv!", "tryNudge": "👇 Tryk på en klokke for at sende en nudge", "widH2": "Altid inden for rækkevidde", "widP2": "Vælg, hvor ofte låseskærmen skifter — hvert 15. minut, hver time eller fra."}, "nb": {"calH2": "Start fra kalenderen", "calP": "Har du allerede datoen lagret? Importer en kalenderhendelse med ett trykk — Nudge gjetter til og med kategorien.", "calRow1": "om 6 uker · 09:30", "calRow2": "om 7 dager", "calRow3": "neste år", "calSheet": "Fra kalender", "catBirthday": "Bursdag", "ctaH2": "Lag din første nedtelling", "ctaP": "Gratis å laste ned. Tell ned til den neste store dagen — sammen.", "demoEyebrow": "Se det i praksis", "demoSub": "En widget på hjem- eller låseskjermen, den siste nedtellingen live i Dynamic Island, og et sveip for å legge en nedtelling til i kalenderen.", "detailEyebrow": "Nærmere titt", "detailH2": "Hver nedtelling, vakker", "detailSub": "Åpne én for hele bildet — sanntidsteller, medlemmer, en vegg av nudges og reaksjoner, stedet på et kart, og overraskelser som låses opp på dagen.", "f1d": "Inviter venner med en lenke eller kode så alle ser samme dag nærme seg.", "f1t": "Delte nedtellinger", "f2d": "Trykk på bjella for å vinke til noen. Legg til en emoji eller en kort melding.", "f2t": "Send en nudge", "f3d": "Widgeter på hjem- og låseskjermen holder neste dag innen rekkevidde — nudge rett derfra.", "f3t": "Widgeter overalt", "f4d": "Se de siste timene telle ned på låseskjermen og i Dynamic Island.", "f4t": "Live-aktiviteter", "f5d": "Bursdager og jubileer fornyes automatisk — også hver uke og måned.", "f5t": "Gjentakende hendelser", "f6d": "Gjør en kalenderhendelse om til en nedtelling med ett trykk, med smarte kategoriforslag.", "f6t": "Fra kalenderen", "featEyebrow": "Hvorfor Nudge", "featH2": "Forventning er bedre delt", "featSub": "Alt du trenger for å telle ned til de store dagene — med dine nærmeste.", "footContact": "Kontakt", "footPrivacy": "Personvern", "footSupport": "Hjelp", "heroBadge": "Delte nedtellinger for øyeblikkene som betyr noe", "heroH1": "Tell ned til det som betyr noe — sammen.", "heroLead": "Følg bursdager, reiser og store dager med venner, og gi dem en liten nudge når dagen nærmer seg.", "heroNote": "iPhone-widgeter · Låseskjerm · Live-aktiviteter · 15 språk", "howEyebrow": "Slik fungerer det", "howH2": "Tre trykk til nedtellingen", "howSub": "Ingen konto nødvendig for å starte. Legg til en dag, gjør den til din, og del den.", "langsBandH2": "Nudge snakker språket ditt", "langsBandSub": "Fullt oversatt til 15 språk — så nedtellingen føles riktig uansett hvor vennene dine er.", "langsEyebrow": "Verden over", "lblDaysLeft": "DAGER IGJEN", "lblMembers": "Medlemmer", "lblNudges": "Nudges", "lblToGo": "IGJEN", "nMsg1": "Gleder meg!! ✈️", "nMsg2": "7 dager igjen 🥳", "navFeatures": "Funksjoner", "navGet": "Hent appen", "navHow": "Slik fungerer det", "navPrivacy": "Personvern", "navWidgets": "Widgeter", "nudgeH2": "Ett trykk for å si «jeg teller ned også».", "nudgeNotif": "👋 Alex nudget deg", "nudgeNotifCtx": "Om Tokyo-tur", "nudgeP1": "En nudge er et lite, gledelig signal mellom venner. Reager med emoji, send en tilbake, eller legg igjen en overraskelse som låses opp på dagen.", "nudgeP2": "Privat fra bunnen: nedtellingene dine ligger på enheten din og deles bare når du vil.", "phHome": "Kommende", "phNow": "nå", "phYearly": "Gjentas årlig", "privEyebrow": "Personvern", "privH2": "Nedtellingene dine forblir dine", "privP1": "Dataene dine synkroniseres privat via din egen iCloud, beskyttet av Apples kryptering — vi kan ikke lese dem.", "privP2": "Delingskoder utløper etter 15 minutter, så gamle invitasjoner kan ikke gjenbrukes.", "privP3": "Du ser alltid nøyaktig hvem som er med i en delt nedtelling — og kan forlate når som helst.", "qrNote": "Nedlastingslenkene er ikke aktive ennå — de vises her ved lansering.", "qrSub": "Skann med iPhone-en din for å laste ned Nudge.", "qrTitle": "Kommer snart", "reactHint": "Trykk på en reaksjon", "revealSub": "Låses opp på dagen", "revealTitle": "2 overraskelser skjult", "s1d": "Velg en dato og legg til emoji, farge, bilde, sted og påminnelser.", "s1t": "Lag en nedtelling", "s2d": "Send en lenke eller 6-sifret kode så venner kan følge med — AirDrop fungerer også.", "s2t": "Del den", "s3d": "Bli påminnet, nudge hverandre, og se konfettien falle på dagen.", "s3t": "Nudge og feir", "sentMsg": "Nudge sendt!", "storeDownload": "Last ned på", "storeSoon": "Kommer snart til", "swipeCap": "Sveip til venstre for kalender, arkiver eller slett.", "tryIt": "Prøv!", "tryNudge": "👇 Trykk på en bjelle for å sende en nudge", "widH2": "Alltid innen rekkevidde", "widP2": "Velg hvor ofte låseskjermen bytter — hvert 15. minutt, hver time eller av."}, "tr": {"calH2": "Takviminden başla", "calP": "Tarih zaten kayıtlı mı? Bir takvim etkinliğini tek dokunuşla içe aktar — Nudge kategoriyi bile tahmin eder.", "calRow1": "6 hafta sonra · 09:30", "calRow2": "7 gün sonra", "calRow3": "gelecek yıl", "calSheet": "Takvimden", "catBirthday": "Doğum günü", "ctaH2": "İlk geri sayımını oluştur", "ctaP": "Ücretsiz indir. Bir sonraki güzel güne birlikte geri say.", "demoEyebrow": "İş başında gör", "demoSub": "Ana ekranda veya kilit ekranında bir widget, Dynamic Island'da canlı son geri sayım ve bir geri sayımı Takvim'e eklemek için tek kaydırma.", "detailEyebrow": "Yakından bak", "detailH2": "Her geri sayım, harika", "detailSub": "Tümünü görmek için birini aç — canlı sayım, üyeler, nudge ve tepki duvarı, haritadaki yer ve günü gelince açılan sürprizler.", "f1d": "Arkadaşlarını bir bağlantı veya kodla davet et, herkes aynı günün yaklaşmasını izlesin.", "f1t": "Paylaşılan geri sayımlar", "f2d": "Birine el sallamak için zile dokun. Bir emoji ya da kısa mesaj ekle.", "f2t": "Nudge gönder", "f3d": "Ana ekran ve kilit ekranı widget'ları bir sonraki günü göz önünde tutar — oradan doğrudan nudge.", "f3t": "Her yerde widget", "f4d": "Son saatlerin kilit ekranında ve Dynamic Island'da geri sayışını izle.", "f4t": "Canlı Etkinlikler", "f5d": "Doğum günleri ve yıldönümleri otomatik yenilenir — haftalık ve aylık da.", "f5t": "Yinelenen etkinlikler", "f6d": "Bir takvim etkinliğini tek dokunuşla geri sayıma dönüştür, akıllı kategori tahminiyle.", "f6t": "Takviminden", "featEyebrow": "Neden Nudge", "featH2": "Heyecan paylaşınca güzel", "featSub": "Büyük günlere geri saymak için gereken her şey — sevdiklerinle.", "footContact": "İletişim", "footPrivacy": "Gizlilik", "footSupport": "Destek", "heroBadge": "Önemli anlar için paylaşılan geri sayımlar", "heroH1": "Önemli olana birlikte geri say.", "heroLead": "Doğum günlerini, gezileri ve büyük günleri arkadaşlarınla takip et, gün yaklaştıkça onlara küçük bir nudge gönder.", "heroNote": "iPhone widget'ları · Kilit Ekranı · Canlı Etkinlikler · 15 dil", "howEyebrow": "Nasıl çalışır", "howH2": "Geri sayıma üç dokunuş", "howSub": "Başlamak için hesap gerekmez. Bir gün ekle, kendine göre düzenle ve paylaş.", "langsBandH2": "Nudge senin dilini konuşur", "langsBandSub": "15 dile tam yerelleştirildi — geri sayım arkadaşların nerede olursa olsun yerini bulsun.", "langsEyebrow": "Dünya çapında", "lblDaysLeft": "GÜN KALDI", "lblMembers": "Üyeler", "lblNudges": "Nudge", "lblToGo": "KALDI", "nMsg1": "Sabırsızlanıyorum!! ✈️", "nMsg2": "7 gün kaldı 🥳", "navFeatures": "Özellikler", "navGet": "Uygulamayı al", "navHow": "Nasıl çalışır", "navPrivacy": "Gizlilik", "navWidgets": "Widget'lar", "nudgeH2": "“Ben de geri sayıyorum” demek için tek dokunuş.", "nudgeNotif": "👋 Alex seni dürttü", "nudgeNotifCtx": "Tokyo gezisi hakkında", "nudgeP1": "Nudge, arkadaşlar arasında küçük, neşeli bir sinyaldir. Emojiyle tepki ver, geri gönder ya da günü gelince açılan bir sürpriz bırak.", "nudgeP2": "Tasarımdan gizli: geri sayımların cihazında durur, yalnızca sen istersen paylaşılır.", "phHome": "Yaklaşan", "phNow": "şimdi", "phYearly": "Her yıl tekrarlanır", "privEyebrow": "Gizlilik", "privH2": "Geri sayımların sana ait kalır", "privP1": "Verilerin kendi iCloud'unla gizlice eşitlenir, Apple'ın şifrelemesiyle korunur — biz okuyamayız.", "privP2": "Paylaşım kodları 15 dakika sonra sona erer, böylece eski davetler yeniden kullanılamaz.", "privP3": "Paylaşılan bir geri sayımda kimlerin olduğunu her zaman görürsün — ve istediğin an ayrılabilirsin.", "qrNote": "İndirme bağlantıları henüz yayında değil — lansmanda burada görünecek.", "qrSub": "İndirmek için iPhone'unla tara.", "qrTitle": "Çok yakında", "reactHint": "Bir tepkiye dokun", "revealSub": "Günü gelince açılır", "revealTitle": "2 sürpriz gizli", "s1d": "Bir tarih seç; emoji, renk, fotoğraf, konum ve hatırlatıcı ekle.", "s1t": "Bir geri sayım oluştur", "s2d": "Bir bağlantı ya da 6 haneli kod gönder, arkadaşların takip etsin — AirDrop da olur.", "s2t": "Paylaş", "s3d": "Hatırlatma al, birbirinizi dürtün ve günü gelince konfetileri izleyin.", "s3t": "Dürt ve kutla", "sentMsg": "Nudge gönderildi!", "storeDownload": "İndir:", "storeSoon": "Çok yakında:", "swipeCap": "Takvim'e ekle, arşivle veya sil için sola kaydır.", "tryIt": "Dene!", "tryNudge": "👇 Nudge göndermek için bir zile dokun", "widH2": "Her zaman bir bakış uzağında", "widP2": "Kilit ekranının ne sıklıkta değişeceğini seç — her 15 dakikada, her saat ya da kapalı."}, "pl": {"calH2": "Zacznij od kalendarza", "calP": "Masz już zapisaną datę? Zaimportuj wydarzenie z kalendarza jednym dotknięciem — Nudge nawet zgadnie kategorię.", "calRow1": "za 6 tygodni · 09:30", "calRow2": "za 7 dni", "calRow3": "w przyszłym roku", "calSheet": "Z kalendarza", "catBirthday": "Urodziny", "ctaH2": "Utwórz pierwsze odliczenie", "ctaP": "Pobierz za darmo. Odliczaj do kolejnego wielkiego dnia — razem.", "demoEyebrow": "Zobacz w akcji", "demoSub": "Widżet na ekranie głównym lub blokady, finałowe odliczenie na żywo w Dynamic Island i przesunięcie, by dodać odliczenie do Kalendarza.", "detailEyebrow": "Z bliska", "detailH2": "Każde odliczenie, pięknie", "detailSub": "Otwórz jedno, by zobaczyć wszystko — licznik na żywo, uczestników, ścianę Nudge'ów i reakcji, miejsce na mapie oraz niespodzianki odsłaniane tego dnia.", "f1d": "Zaproś znajomych linkiem lub kodem, aby wszyscy śledzili nadchodzący dzień.", "f1t": "Wspólne odliczenia", "f2d": "Dotknij dzwonka, aby pomachać komuś. Dodaj emoji lub krótką wiadomość.", "f2t": "Wyślij Nudge", "f3d": "Widżety na ekranie głównym i blokady trzymają kolejny dzień w zasięgu wzroku — Nudge prosto z nich.", "f3t": "Widżety wszędzie", "f4d": "Obserwuj ostatnie godziny na ekranie blokady i w Dynamic Island.", "f4t": "Aktywności na żywo", "f5d": "Urodziny i rocznice odnawiają się automatycznie — także co tydzień i miesiąc.", "f5t": "Wydarzenia cykliczne", "f6d": "Zamień wydarzenie z kalendarza w odliczenie jednym dotknięciem, ze sprytnym typowaniem kategorii.", "f6t": "Z kalendarza", "featEyebrow": "Dlaczego Nudge", "featH2": "Wyczekiwanie jest lepsze wspólnie", "featSub": "Wszystko, czego trzeba, by odliczać do wielkich dni — z bliskimi.", "footContact": "Kontakt", "footPrivacy": "Prywatność", "footSupport": "Pomoc", "heroBadge": "Wspólne odliczenia do chwil, które się liczą", "heroH1": "Odliczaj do tego, co ważne — razem.", "heroLead": "Śledź urodziny, wyjazdy i wielkie dni ze znajomymi i wysyłaj im Nudge, gdy dzień się zbliża.", "heroNote": "Widżety iPhone'a · Ekran blokady · Aktywności na żywo · 15 języków", "howEyebrow": "Jak to działa", "howH2": "Trzy dotknięcia do odliczenia", "howSub": "Konto nie jest potrzebne. Dodaj dzień, dostosuj go i udostępnij.", "langsBandH2": "Nudge mówi w Twoim języku", "langsBandSub": "W pełni przetłumaczony na 15 języków — by odliczanie pasowało wszędzie, gdzie są znajomi.", "langsEyebrow": "Na całym świecie", "lblDaysLeft": "DNI DO KOŃCA", "lblMembers": "Uczestnicy", "lblNudges": "Nudge", "lblToGo": "POZOSTAŁO", "nMsg1": "Nie mogę się doczekać!! ✈️", "nMsg2": "Zostało 7 dni 🥳", "navFeatures": "Funkcje", "navGet": "Pobierz aplikację", "navHow": "Jak to działa", "navPrivacy": "Prywatność", "navWidgets": "Widżety", "nudgeH2": "Jedno dotknięcie, by powiedzieć „też odliczam”.", "nudgeNotif": "👋 Alex trąca Cię", "nudgeNotifCtx": "Dotyczy: Wyjazd do Tokio", "nudgeP1": "Nudge to drobny, radosny sygnał między znajomymi. Zareaguj emoji, odeślij albo zostaw niespodziankę odsłanianą tego dnia.", "nudgeP2": "Prywatne z założenia: odliczenia są na Twoim urządzeniu i udostępniane tylko, gdy chcesz.", "phHome": "Nadchodzące", "phNow": "teraz", "phYearly": "Powtarza się co roku", "privEyebrow": "Prywatność", "privH2": "Twoje odliczenia pozostają Twoje", "privP1": "Dane synchronizują się prywatnie przez Twoje iCloud, chronione szyfrowaniem Apple — nie możemy ich odczytać.", "privP2": "Kody udostępniania wygasają po 15 minutach, więc starych zaproszeń nie da się użyć ponownie.", "privP3": "Zawsze widzisz dokładnie, kto jest we wspólnym odliczeniu — i możesz wyjść w każdej chwili.", "qrNote": "Linki do pobrania nie są jeszcze aktywne — pojawią się tu przy premierze.", "qrSub": "Zeskanuj iPhone'em, aby pobrać Nudge.", "qrTitle": "Wkrótce", "reactHint": "Dotknij reakcji", "revealSub": "Odsłoni się tego dnia", "revealTitle": "2 ukryte niespodzianki", "s1d": "Wybierz datę i dodaj emoji, kolor, zdjęcie, lokalizację i przypomnienia.", "s1t": "Utwórz odliczenie", "s2d": "Wyślij link lub 6-cyfrowy kod, by znajomi śledzili — AirDrop też działa.", "s2t": "Udostępnij", "s3d": "Otrzymuj przypomnienia, wysyłajcie sobie Nudge i patrzcie, jak tego dnia leci konfetti.", "s3t": "Nudge i świętuj", "sentMsg": "Nudge wysłany!", "storeDownload": "Pobierz z", "storeSoon": "Wkrótce w", "swipeCap": "Przesuń w lewo: Kalendarz, archiwizuj lub usuń.", "tryIt": "Spróbuj!", "tryNudge": "👇 Dotknij dzwonka, aby wysłać Nudge", "widH2": "Zawsze w zasięgu wzroku", "widP2": "Ustaw, jak często zmienia się ekran blokady — co 15 minut, co godzinę lub wcale."}, "zh-Hant": {"navFeatures": "功能", "navHow": "使用方法", "navWidgets": "小元件", "navPrivacy": "隱私", "navGet": "獲取應用", "heroBadge": "為重要時刻而設的共享倒數日", "heroH1": "一起，倒數重要的日子。", "heroLead": "和朋友一起追蹤生日、旅行和大日子，臨近時給對方一個 nudge。", "storeDownload": "下載於", "storeSoon": "即將登陸", "heroNote": "iPhone 小元件 · 鎖屏 · 實時活動 · 9 種語言", "phHome": "即將到來", "phYearly": "每年重複", "lblDaysLeft": "天", "lblToGo": "還有", "featEyebrow": "為什麼選 Nudge", "featH2": "期待，分享更美好", "featSub": "倒數大日子所需的一切——和你在乎的人一起。", "f1t": "共享倒數日", "f1d": "用連結或程式碼邀請好友，一起感受日子臨近。", "f2t": "傳送 nudge", "f2d": "點一下鈴鐺打個招呼。可加表情或留言。", "f3t": "處處皆小元件", "f3d": "主屏與鎖屏小元件，下一個日子一眼可見——還能直接 nudge。", "f4t": "實時活動", "f4d": "在鎖屏和靈動島上實時檢視最後的倒計時。", "f5t": "重複事件", "f5d": "生日和紀念日自動續期——也支援每週、每月。", "f6t": "從日曆匯入", "f6d": "一鍵把日曆事件變成倒數日，還能智慧猜測類別。", "nudgeH2": "一鍵告訴對方“我也在倒數”。", "nudgeP1": "nudge 是朋友間小小的快樂提醒。用表情回應、回敬一個，或藏一個當天才揭曉的驚喜。", "nudgeP2": "隱私優先：你的倒數日存在裝置上，只有你願意時才分享。", "phNow": "剛剛", "nudgeNotif": "👋 Alex 給你發了個 nudge", "nudgeNotifCtx": "關於 東京之旅", "nMsg1": "太期待啦！！✈️", "nMsg2": "還有 7 天 🥳", "detailEyebrow": "細看", "detailH2": "每個倒數日，都很美", "detailSub": "開啟看全部——實時倒數、成員、滿牆的 nudge 與反應、地圖上的地點，還有當天揭曉的驚喜。", "catBirthday": "生日", "lblMembers": "成員", "lblNudges": "Nudge", "revealTitle": "隱藏了 2 個驚喜", "revealSub": "當天揭曉", "howEyebrow": "使用方法", "howH2": "三步建好倒數日", "howSub": "無需賬號即可開始。新增日子、個性化、分享。", "s1t": "建立倒數日", "s1d": "選好日期，加上表情、顏色、照片、地點和提醒。", "s2t": "分享它", "s2d": "傳送連結或 6 位程式碼——也支援 AirDrop。", "s3t": "Nudge 並慶祝", "s3d": "接收提醒、互相 nudge，在大日子撒下紙屑慶祝。", "widH2": "一眼即見", "widP1": "把 Nudge 加到主屏或鎖屏。自動輪播多個倒數日，不開應用也能 nudge。", "widP2": "設定鎖屏輪播的頻率——每 15 分鐘、每小時或關閉。", "calH2": "從日曆開始", "calP": "日期已經記好了？一鍵匯入日曆事件——Nudge 還能猜出類別。", "calSheet": "從日曆", "calRow1": "6 周後 · 09:30", "calRow2": "7 天后", "calRow3": "明年", "privEyebrow": "隱私", "privH2": "你的倒數日，始終屬於你", "privP1": "資料透過你自己的 iCloud 私密同步，受 Apple 加密保護——我們無法讀取。", "privP2": "分享程式碼 15 分鐘後過期，舊邀請無法再用。", "privP3": "你隨時能看到誰在共享倒數日中——也可隨時退出。", "ctaH2": "建立你的第一個倒數日", "ctaP": "免費下載。一起倒數下一個美好的日子。", "footPrivacy": "隱私", "footSupport": "支援", "footContact": "聯絡", "tryNudge": "👇 點一下鈴鐺傳送 nudge", "tryIt": "試試看！", "sentMsg": "已傳送 nudge！", "reactHint": "點一下反應", "demoEyebrow": "實際演示", "demoH2": "就在你的螢幕上，實時呈現", "demoSub": "在靈動島檢視最後的倒計時——左滑任意倒數日即可加入日曆。", "swipeCap": "向左滑動：日曆、歸檔或刪除。", "qrTitle": "即將推出", "qrSub": "用 iPhone 掃碼下載 Nudge。", "qrNote": "下載連結尚未上線——上線時會顯示在這裡。", "langsEyebrow": "全球", "langsBandH2": "Nudge 說你的語言", "langsBandSub": "完整本地化為 15 種語言——讓倒數在哪裡都恰到好處。"}, "fr": {"qrTitle": "Bientôt disponible", "qrSub": "Scannez avec votre iPhone pour télécharger Nudge.", "qrNote": "Les liens de téléchargement ne sont pas encore actifs — ils apparaîtront ici au lancement.", "langsEyebrow": "Mondial", "langsBandH2": "Nudge parle votre langue", "langsBandSub": "Entièrement traduit en 15 langues — pour que le compte à rebours soit parfait partout."}, "es": {"qrTitle": "Próximamente", "qrSub": "Escanea con tu iPhone para descargar Nudge.", "qrNote": "Los enlaces de descarga aún no están activos — aparecerán aquí en el lanzamiento.", "langsEyebrow": "Global", "langsBandH2": "Nudge habla tu idioma", "langsBandSub": "Totalmente traducido a 15 idiomas — para que la cuenta atrás encaje en cualquier lugar."}, "it": {"qrTitle": "In arrivo", "qrSub": "Scansiona con l’iPhone per scaricare Nudge.", "qrNote": "I link per il download non sono ancora attivi — appariranno qui al lancio.", "langsEyebrow": "Globale", "langsBandH2": "Nudge parla la tua lingua", "langsBandSub": "Completamente tradotto in 15 lingue — così il conto alla rovescia è perfetto ovunque."}, "de": {"qrTitle": "Demnächst", "qrSub": "Scanne mit deinem iPhone, um Nudge zu laden.", "qrNote": "Die Download-Links sind noch nicht aktiv — sie erscheinen hier zum Start.", "langsEyebrow": "Weltweit", "langsBandH2": "Nudge spricht deine Sprache", "langsBandSub": "Vollständig in 15 Sprachen übersetzt — damit der Countdown überall passt."}, "pt": {"qrTitle": "Em breve", "qrSub": "Escaneie com seu iPhone para baixar o Nudge.", "qrNote": "Os links de download ainda não estão ativos — aparecerão aqui no lançamento.", "langsEyebrow": "Global", "langsBandH2": "O Nudge fala a sua língua", "langsBandSub": "Totalmente traduzido em 15 idiomas — para a contagem ficar perfeita em qualquer lugar."}, "zh": {"qrTitle": "即将推出", "qrSub": "用 iPhone 扫码下载 Nudge。", "qrNote": "下载链接尚未上线——上线时会显示在这里。", "langsEyebrow": "全球", "langsBandH2": "Nudge 说你的语言", "langsBandSub": "完整本地化为 15 种语言——让倒数在哪里都恰到好处。"}, "ko": {"qrTitle": "곧 출시", "qrSub": "iPhone으로 스캔해 Nudge를 받으세요.", "qrNote": "다운로드 링크는 아직 준비 중이에요 — 출시되면 여기 표시됩니다.", "langsEyebrow": "전 세계", "langsBandH2": "Nudge는 당신의 언어를 해요", "langsBandSub": "15개 언어로 완전 현지화 — 어디서나 딱 맞는 카운트다운."}, "ja": {"qrTitle": "近日公開", "qrSub": "iPhoneでスキャンしてNudgeをダウンロード。", "qrNote": "ダウンロードリンクはまだ準備中です — 公開時にここに表示されます。", "langsEyebrow": "世界中で", "langsBandH2": "Nudgeはあなたの言語を話します", "langsBandSub": "15言語に完全ローカライズ — どこでもしっくりくるカウントダウン。"}};
   for(const l in EXTRA2){T[l]=Object.assign(T[l]||{},EXTRA2[l]);}
+  const EXTRA3={"fr": {"scrHome": "Écran d'accueil", "scrLock": "Écran verrouillé"}, "es": {"scrHome": "Pantalla de inicio", "scrLock": "Pantalla bloqueada"}, "it": {"scrHome": "Schermata Home", "scrLock": "Schermata di blocco"}, "de": {"scrHome": "Home-Bildschirm", "scrLock": "Sperrbildschirm"}, "pt": {"scrHome": "Tela de início", "scrLock": "Tela bloqueada"}, "zh": {"scrHome": "主屏幕", "scrLock": "锁屏"}, "zh-Hant": {"scrHome": "主畫面", "scrLock": "鎖定畫面"}, "ko": {"scrHome": "홈 화면", "scrLock": "잠금 화면"}, "ja": {"scrHome": "ホーム画面", "scrLock": "ロック画面"}, "sv": {"scrHome": "Hemskärm", "scrLock": "Låsskärm"}, "da": {"scrHome": "Hjemmeskærm", "scrLock": "Låseskærm"}, "nb": {"scrHome": "Hjem-skjerm", "scrLock": "Låseskjerm"}, "tr": {"scrHome": "Ana ekran", "scrLock": "Kilit ekranı"}, "pl": {"scrHome": "Ekran główny", "scrLock": "Ekran blokady"}};
+  for(const l in EXTRA3){T[l]=Object.assign(T[l]||{},EXTRA3[l]);}
+  const EXTRA4={"fr": {"nudgeReminder": "🎂 L'anniversaire de maman est dans 7 jours !", "tryWidget": "👇 Touchez les flèches ou la cloche"}, "es": {"nudgeReminder": "🎂 ¡El cumpleaños de mamá es en 7 días!", "tryWidget": "👇 Toca las flechas o la campana"}, "it": {"nudgeReminder": "🎂 Il compleanno della mamma è tra 7 giorni!", "tryWidget": "👇 Tocca le frecce o la campanella"}, "de": {"nudgeReminder": "🎂 Mamas Geburtstag ist in 7 Tagen!", "tryWidget": "👇 Tipp auf die Pfeile oder die Glocke"}, "pt": {"nudgeReminder": "🎂 O aniversário da mãe é em 7 dias!", "tryWidget": "👇 Toque nas setas ou no sino"}, "zh": {"nudgeReminder": "🎂 妈妈的生日还有 7 天！", "tryWidget": "👇 点箭头或铃铛"}, "zh-Hant": {"nudgeReminder": "🎂 媽媽的生日還有 7 天！", "tryWidget": "👇 點箭頭或鈴鐺"}, "ko": {"nudgeReminder": "🎂 엄마 생일이 7일 남았어요!", "tryWidget": "👇 화살표나 종을 누르세요"}, "ja": {"nudgeReminder": "🎂 ママの誕生日まであと7日！", "tryWidget": "👇 矢印かベルをタップ"}, "sv": {"nudgeReminder": "🎂 Mammas födelsedag om 7 dagar!", "tryWidget": "👇 Tryck på pilarna eller klockan"}, "da": {"nudgeReminder": "🎂 Mors fødselsdag om 7 dage!", "tryWidget": "👇 Tryk på pilene eller klokken"}, "nb": {"nudgeReminder": "🎂 Mammas bursdag om 7 dager!", "tryWidget": "👇 Trykk på pilene eller bjella"}, "tr": {"nudgeReminder": "🎂 Annenin doğum gününe 7 gün!", "tryWidget": "👇 Oklara veya zile dokun"}, "pl": {"nudgeReminder": "🎂 Urodziny mamy za 7 dni!", "tryWidget": "👇 Dotknij strzałek lub dzwonka"}};
+  for(const l in EXTRA4){T[l]=Object.assign(T[l]||{},EXTRA4[l]);}
+
+
 
 
   // store English originals, then apply a language
@@ -673,17 +742,26 @@
       document.body.appendChild(s); setTimeout(()=>s.remove(),1000);
     });
   }
-  document.querySelectorAll('[data-nudge]').forEach(b=>{
-    b.addEventListener('click',ev=>{
-      ev.preventDefault();
-      const card=b.closest('.mini-card');
-      card.classList.remove('wiggle'); void card.offsetWidth; card.classList.add('wiggle');
-      burst(b,['👋','🎉','✨','💛']);
+  // Emoji tied to the card's event (from its category chip) + a wave.
+  function cardEmojis(bell){
+    const card=bell.closest('.mini-card');
+    const chip=card&&card.querySelector('.chip');
+    const e=(chip?chip.textContent.trim().split(/\s+/)[0]:'')||bell.dataset.emoji||'';
+    return e ? [e,'👋',e,'✨'] : ['👋','🎉','✨'];
+  }
+  function nudgeCard(b){
+    const card=b.closest('.mini-card')||b.closest('.ls-widget')||b.closest('.hs-widget')||b.closest('.widget-demo');
+    if(card){ card.classList.remove('wiggle'); void card.offsetWidth; card.classList.add('wiggle'); }
+    burst(b, cardEmojis(b));
+    if(card){
       let chip=card.querySelector('.sent-chip');
-      if(!chip){chip=document.createElement('span');chip.className='sent-chip';card.appendChild(chip);}
+      if(!chip){ chip=document.createElement('span'); chip.className='sent-chip'; card.appendChild(chip); }
       chip.textContent=document.getElementById('sentMsgStr').textContent;
       chip.classList.add('show'); clearTimeout(chip._t); chip._t=setTimeout(()=>chip.classList.remove('show'),1300);
-    });
+    }
+  }
+  document.querySelectorAll('[data-nudge]').forEach(b=>{
+    b.addEventListener('click',ev=>{ ev.preventDefault(); nudgeCard(b); });
   });
   const REACTS=['❤️','🔥','🎉','🥳','😍','👏'];
   document.querySelectorAll('[data-react]').forEach(rx=>{
@@ -701,10 +779,10 @@
     const bells=document.querySelectorAll('[data-nudge]');
     if(!bells.length) return;
     const b=bells[Math.floor(Math.random()*bells.length)];
-    const card=b.closest('.mini-card');
-    card.classList.remove('wiggle'); void card.offsetWidth; card.classList.add('wiggle');
-    burst(b,['👋','✨']);
-  },25000);
+    const card=b.closest('.mini-card')||b.closest('.ls-widget')||b.closest('.hs-widget')||b.closest('.widget-demo');
+    if(card){ card.classList.remove('wiggle'); void card.offsetWidth; card.classList.add('wiggle'); }
+    burst(b, cardEmojis(b));
+  },20000);
 
   // QR download modal — store/"Get the app" buttons open it (downloads not live yet)
   const qrModal=document.getElementById('qrModal');
@@ -714,6 +792,18 @@
   qrModal.addEventListener('click',e=>{ if(e.target===qrModal) closeQR(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeQR(); });
   document.querySelectorAll('a.store, a.nav-cta').forEach(a=>a.addEventListener('click',openQR));
+
+  // Widget demo: arrows cycle through events
+  (function(){
+    const WD=[{e:'✈️',t:'Trip to Tokyo',n:'42'},{e:'🎂',t:"Mom's Birthday",n:'7'},{e:'💍',t:'The Wedding',n:'120'},{e:'🏖️',t:'Summer Break',n:'300'}];
+    let i=0;
+    const top=document.getElementById('wdTop'),num=document.getElementById('wdNum'),bell=document.getElementById('wdBell');
+    const prev=document.getElementById('wdPrev'),next=document.getElementById('wdNext');
+    function render(){ if(!top)return; const x=WD[i]; top.textContent=x.e+' '+x.t; num.textContent=x.n; if(bell)bell.dataset.emoji=x.e; }
+    if(prev)prev.addEventListener('click',()=>{i=(i-1+WD.length)%WD.length;render();});
+    if(next)next.addEventListener('click',()=>{i=(i+1)%WD.length;render();});
+    render();
+  })();
 </script>
 </body>
 </html>
