@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nudge — Count down to what matters, together</title>
+<meta name="description" content="Nudge is a shared countdown app. Count the days to birthdays, trips and big moments with friends — and give them a little nudge along the way." />
+<style>
+  :root{
+    --sky:#4D8DFF; --violet:#8B5CF6; --rose:#FF6B6B; --coral:#FF8A65;
+    --amber:#FBBF24; --mint:#34D399; --ink:#15151c; --muted:#6b6b78;
+    --bg:#ffffff; --card:#f6f7fb; --radius:22px;
+    --grad:linear-gradient(135deg,var(--sky),var(--violet));
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* Nav */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(160%) blur(14px);background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.05)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:14px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .brand .mark{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;box-shadow:0 6px 16px rgba(123,80,246,.35)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .nav-cta{background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .15s;white-space:nowrap}
+  .nav-cta:hover{transform:translateY(-1px)}
+  .nav-links{display:flex;gap:24px;font-size:15px;color:var(--muted);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .lang{display:flex;align-items:center;gap:6px;border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:6px 10px;background:#fff}
+  .lang svg{width:15px;height:15px;color:var(--muted)}
+  .lang select{border:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);font-weight:600;cursor:pointer;outline:none}
+  @media(max-width:860px){.nav-links{display:none}}
+
+  /* Hero */
+  .hero{position:relative;overflow:hidden;background:var(--grad);color:#fff;padding:74px 0 92px}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;position:relative;z-index:2}
+  .badge-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:22px}
+  .hero h1{font-size:52px;line-height:1.05;letter-spacing:-.03em;font-weight:850;margin-bottom:18px}
+  .hero p.lead{font-size:20px;opacity:.94;max-width:32ch;margin-bottom:30px}
+  .stores{display:flex;gap:14px;flex-wrap:wrap}
+  .store{display:inline-flex;align-items:center;gap:11px;background:#0b0b12;color:#fff;padding:12px 18px;border-radius:15px;transition:transform .15s;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+  .store:hover{transform:translateY(-2px)}
+  .store small{display:block;font-size:11px;opacity:.8;line-height:1}
+  .store strong{display:block;font-size:17px;font-weight:700;line-height:1.15}
+  .store svg{width:24px;height:24px}
+  .store.soon{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+  .hero-note{margin-top:18px;font-size:13px;opacity:.85}
+
+  .floaties{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+  .floaties span{position:absolute;bottom:-40px;opacity:0;animation:rise linear infinite}
+  @keyframes rise{0%{opacity:0;transform:translateY(0)}15%{opacity:.85}50%{transform:translateY(-46vh) translateX(20px)}85%{opacity:.7}100%{opacity:0;transform:translateY(-88vh) translateX(-10px)}}
+
+  /* Phone shells */
+  .phone{justify-self:center;width:300px;background:#0b0b12;border-radius:46px;padding:11px;box-shadow:0 40px 80px rgba(20,10,60,.45),inset 0 0 0 2px rgba(255,255,255,.06);position:relative}
+  .phone .notch{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:108px;height:26px;background:#0b0b12;border-radius:999px;z-index:5}
+  .screen{border-radius:36px;background:linear-gradient(180deg,#eef1fb,#f7f4ff);overflow:hidden;position:relative;padding:44px 14px 16px}
+  .screen h4{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0 2px 6px}
+  .sec-label{font-size:12px;font-weight:700;color:#9a9aa8;margin:8px 4px 7px;text-transform:none}
+
+  .mini-card{border-radius:18px;padding:12px 13px;color:#fff;display:flex;align-items:center;gap:9px;margin-bottom:10px;box-shadow:0 8px 18px rgba(0,0,0,.14)}
+  .mini-card .l{flex:1;min-width:0}
+  .chip{display:inline-block;font-size:9px;font-weight:700;background:rgba(255,255,255,.26);padding:2px 7px;border-radius:999px;margin-bottom:3px}
+  .mini-card .t{font-weight:800;font-size:14.5px;line-height:1.12}
+  .mini-card .d{font-size:10px;opacity:.92;margin-top:1px}
+  .num{text-align:right;line-height:.95}
+  .num b{font-size:25px;font-weight:850;display:block}
+  .num small{font-size:8.5px;font-weight:700;opacity:.92;letter-spacing:.03em}
+  .bell{width:33px;height:33px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;flex:none}
+  .bell svg{width:16px;height:16px;color:#fff}
+
+  @media(max-width:900px){
+    .hero .wrap{grid-template-columns:1fr;text-align:center}
+    .hero p.lead{margin-inline:auto}.stores{justify-content:center}.badge-pill{margin-inline:auto}
+    .phone{margin-top:14px}.hero h1{font-size:40px}
+  }
+
+  /* Sections */
+  section.block{padding:84px 0}
+  .eyebrow{color:var(--violet);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-align:center}
+  .h2{font-size:38px;font-weight:850;letter-spacing:-.025em;text-align:center;margin:10px auto 14px;max-width:20ch}
+  .sub{color:var(--muted);text-align:center;font-size:18px;max-width:56ch;margin:0 auto 50px}
+
+  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:900px){.feature-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.feature-grid{grid-template-columns:1fr}}
+  .feature{background:var(--card);border:1px solid rgba(0,0,0,.04);border-radius:var(--radius);padding:26px 24px;transition:transform .18s,box-shadow .18s}
+  .feature:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(80,60,160,.12)}
+  .feature .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;margin-bottom:16px}
+  .feature h3{font-size:19px;font-weight:800;letter-spacing:-.01em;margin-bottom:7px}
+  .feature p{color:var(--muted);font-size:15.5px}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:900px){.split{grid-template-columns:1fr;text-align:center}}
+  .alt{background:var(--card)}
+  .split h2{font-size:34px;font-weight:850;letter-spacing:-.02em;margin-bottom:14px}
+  .split p{color:var(--muted);font-size:17px;margin-bottom:14px}
+
+  /* Nudge visuals */
+  .nudge-stack{display:grid;gap:14px;justify-items:center}
+  .notif{width:330px;max-width:100%;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.06);border-radius:20px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 16px 36px rgba(80,60,160,.16)}
+  .notif .ai{width:34px;height:34px;border-radius:9px;background:var(--grad);display:grid;place-items:center;flex:none}
+  .notif .ai svg{width:18px;height:18px;color:#fff}
+  .notif .nb{flex:1;text-align:left}
+  .notif .top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .notif .msg{font-size:14.5px;font-weight:600;margin-top:2px}
+  .notif .ctx{font-size:12.5px;color:var(--muted)}
+  .bubbles{width:330px;max-width:100%;display:grid;gap:10px}
+  .nbubble{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:11px 13px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 22px rgba(80,60,160,.10)}
+  .avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px;flex:none;position:relative;overflow:hidden}
+  .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .nbubble .body{flex:1;text-align:left}
+  .nbubble .nm{font-size:14px;font-weight:800}
+  .nbubble .tx{font-size:13.5px;color:#33333d}
+  .reaction{font-size:13px;background:#f1eefc;border-radius:999px;padding:4px 9px;flex:none}
+
+  /* Detail phone */
+  .detail-hero{border-radius:22px;background:linear-gradient(135deg,#FF6B6B,#FF8A65);color:#fff;padding:14px;position:relative;overflow:hidden;text-align:center}
+  .detail-hero .chips{display:flex;gap:5px;justify-content:flex-start}
+  .detail-hero .bigemoji{font-size:34px;margin:4px 0 2px}
+  .detail-hero .big{font-size:46px;font-weight:850;line-height:1}
+  .detail-hero .dl{font-size:10px;font-weight:700;opacity:.92;letter-spacing:.05em}
+  .detail-hero .dt{font-size:11px;opacity:.92;margin-top:4px}
+  .members{display:flex;align-items:center;gap:0;margin:12px 2px 4px}
+  .members .avatar{width:30px;height:30px;font-size:12px;border:2px solid #f7f4ff;margin-left:-8px}
+  .members .avatar:first-child{margin-left:0}
+  .members .more{font-size:12px;color:var(--muted);margin-left:8px;font-weight:700}
+  .d-sec{font-size:13px;font-weight:800;margin:12px 4px 7px}
+  .reveal{border-radius:14px;background:#efeafc;padding:11px 12px;display:flex;align-items:center;gap:9px;margin-top:6px}
+  .reveal .g{font-size:20px}
+  .reveal .rt{font-size:12.5px;font-weight:800}
+  .reveal .rs{font-size:11px;color:var(--muted)}
+  .maps{border-radius:14px;height:74px;margin-top:10px;background:
+     radial-gradient(circle at 60% 45%, rgba(0,0,0,.0) 6px, transparent 7px),
+     linear-gradient(135deg,#cde6d6,#a8dcc0);position:relative;overflow:hidden}
+  .maps .road{position:absolute;inset:0;background:
+     linear-gradient(90deg,transparent 46%,rgba(255,255,255,.6) 46%,rgba(255,255,255,.6) 52%,transparent 52%),
+     linear-gradient(0deg,transparent 60%,rgba(255,255,255,.5) 60%,rgba(255,255,255,.5) 64%,transparent 64%)}
+  .maps .pin{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:20px}
+
+  /* Steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+  @media(max-width:760px){.steps{grid-template-columns:1fr}}
+  .step{position:relative;padding:28px 24px;border-radius:var(--radius);background:#fff;border:1px solid rgba(0,0,0,.06)}
+  .step::before{counter-increment:s;content:counter(s);position:absolute;top:-16px;left:24px;width:38px;height:38px;border-radius:11px;background:var(--grad);color:#fff;font-weight:800;display:grid;place-items:center;box-shadow:0 8px 18px rgba(123,80,246,.35)}
+  .step h3{margin:16px 0 7px;font-size:18px;font-weight:800}
+  .step p{color:var(--muted);font-size:15px}
+
+  /* Calendar band */
+  .calsheet{width:330px;max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:20px;box-shadow:0 14px 34px rgba(80,60,160,.12);overflow:hidden}
+  .calsheet .ch{padding:12px 15px;font-weight:800;font-size:14px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
+  .calrow{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid rgba(0,0,0,.05)}
+  .calrow:last-child{border-bottom:0}
+  .datebadge{width:42px;height:42px;border-radius:11px;background:rgba(77,141,255,.14);color:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+  .datebadge b{font-size:15px;font-weight:800;line-height:1}
+  .datebadge small{font-size:9px;font-weight:700;text-transform:uppercase}
+  .calrow .ci{flex:1;text-align:left}
+  .calrow .ci b{font-size:14px;font-weight:700;display:block}
+  .calrow .ci small{font-size:12px;color:var(--muted)}
+  .plus{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+
+  /* Privacy */
+  .privacy{background:var(--card)}
+  .priv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+  @media(max-width:760px){.priv-grid{grid-template-columns:1fr}}
+  .pcard{background:#fff;border:1px solid rgba(0,0,0,.05);border-radius:var(--radius);padding:24px}
+  .pcard .ic{width:44px;height:44px;border-radius:12px;background:rgba(52,211,153,.16);display:grid;place-items:center;font-size:22px;margin-bottom:13px}
+  .pcard p{color:var(--muted);font-size:15.5px}
+
+  /* CTA + footer */
+  .cta{background:var(--grad);color:#fff;text-align:center;border-radius:32px;padding:62px 28px;max-width:1120px;margin:0 auto}
+  .cta h2{font-size:38px;font-weight:850;letter-spacing:-.02em;margin-bottom:14px}
+  .cta p{opacity:.94;font-size:18px;margin-bottom:28px}
+  .cta .stores{justify-content:center}
+  footer{padding:46px 0 60px;color:var(--muted);font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+  footer .brand{color:var(--ink)}
+  .langs{margin-top:10px;font-size:13px;color:var(--muted)}
+
+  /* Photo-style covers on cards */
+  .mini-card.cover{position:relative;overflow:hidden}
+  .mini-card .cov{position:absolute;inset:0;z-index:0}
+  .mini-card .cov svg,.mini-card .cov .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .mini-card .cov .photo{z-index:1;background:#2a2a3a}
+  .mini-card.cover::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(0,0,0,.52),rgba(0,0,0,.18) 55%,rgba(0,0,0,.5))}
+  .mini-card .l,.mini-card .num,.mini-card .bell{position:relative;z-index:1}
+  button.bell{border:0;padding:0;font:inherit;color:inherit;-webkit-appearance:none;cursor:pointer;transition:transform .12s}
+  button.bell:active{transform:scale(.86)}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-2.4deg)}40%{transform:rotate(2deg)}60%{transform:rotate(-1.4deg)}80%{transform:rotate(1deg)}}
+  .wiggle{animation:wiggle .55s ease}
+  .sent-chip{position:absolute;z-index:5;top:8px;left:50%;transform:translateX(-50%) translateY(-6px);background:#fff;color:#15151c;font-size:11px;font-weight:800;padding:5px 11px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.25);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}
+  .sent-chip.show{opacity:1;transform:translateX(-50%) translateY(2px)}
+  .fly{position:fixed;z-index:9999;pointer-events:none;font-size:22px;will-change:transform,opacity;animation:fly 1s ease-out forwards}
+  @keyframes fly{0%{opacity:1;transform:translate(-50%,-50%) scale(.8)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-90px) scale(1.4)}}
+
+  .nudge-callout{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:13px;font-weight:700;padding:8px 15px;border-radius:999px;animation:bob 1.7s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .phone-col{display:grid;justify-items:center;gap:14px}
+
+  .tryit{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--violet);padding:3px 9px;border-radius:999px;vertical-align:middle}
+  .try-react{cursor:pointer;user-select:none;transition:transform .1s}
+  .try-react:hover{transform:scale(1.12)}
+  .react-hint{display:flex;align-items:center;gap:8px;justify-content:center;font-size:13px;color:var(--muted);font-weight:700;margin-top:4px}
+
+  /* Dynamic Island + swipe demo */
+  .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  @media(max-width:860px){.demo-grid{grid-template-columns:1fr;gap:46px}}
+  .di-phone{width:300px;max-width:100%;height:170px;margin:0 auto;background:#0b0b12;border-radius:34px 34px 24px 24px;position:relative;box-shadow:0 26px 60px rgba(20,10,60,.4);overflow:hidden;border:2px solid rgba(255,255,255,.07)}
+  .di-wall{position:absolute;inset:0;background:linear-gradient(160deg,#241657,#4a2a86 60%,#7a3f9e)}
+  .island{position:absolute;top:14px;left:50%;transform:translateX(-50%);min-width:206px;height:38px;background:#000;border-radius:999px;display:flex;align-items:center;gap:9px;padding:0 13px;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.06);animation:ipulse 3.4s ease-in-out infinite}
+  @keyframes ipulse{0%,100%{min-width:206px}50%{min-width:222px}}
+  .island .di-emoji{font-size:16px}
+  .island .di-count{font-variant-numeric:tabular-nums;font-weight:800;font-size:14.5px;letter-spacing:.4px}
+  .island .di-ring{margin-left:auto;width:18px;height:18px;border-radius:50%;border:2.4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin 1.5s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .di-time{position:absolute;top:74px;left:0;right:0;text-align:center;color:#fff;font-weight:800;font-size:46px;opacity:.95;font-variant-numeric:tabular-nums;letter-spacing:1px}
+  .di-date{position:absolute;top:128px;left:0;right:0;text-align:center;color:rgba(255,255,255,.72);font-size:13px;font-weight:600}
+
+  .swipe-demo{width:330px;max-width:100%;margin:0 auto;position:relative;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(80,60,160,.16)}
+  .swipe-actions{position:absolute;inset:0;display:flex;justify-content:flex-end}
+  .swipe-actions .sa{width:54px;display:grid;place-items:center;color:#fff}
+  .swipe-actions .sa svg{width:21px;height:21px}
+  .swipe-row{position:relative;z-index:2;animation:swipe 4.4s ease-in-out infinite}
+  @keyframes swipe{0%,14%{transform:translateX(0)}40%,72%{transform:translateX(-162px)}96%,100%{transform:translateX(0)}}
+  .swipe-cap{text-align:center;color:var(--muted);font-size:14px;margin-top:14px}
+</style>
+</head>
+<body>
+
+<span id="sentMsgStr" data-i18n="sentMsg" style="display:none">Nudge sent!</span>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark">{BELL}</span>Nudge</a>
+    <div class="nav-links">
+      <a href="#features" data-i18n="navFeatures">Features</a>
+      <a href="#how" data-i18n="navHow">How it works</a>
+      <a href="#widgets" data-i18n="navWidgets">Widgets</a>
+      <a href="#privacy" data-i18n="navPrivacy">Privacy</a>
+    </div>
+    <div class="nav-right">
+      <span class="lang">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>
+        <select id="lang" aria-label="Language">
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="it">Italiano</option>
+          <option value="de">Deutsch</option>
+          <option value="pt">Português</option>
+          <option value="zh">中文</option>
+          <option value="ko">한국어</option>
+          <option value="ja">日本語</option>
+        </select>
+      </span>
+      <a class="nav-cta" href="#get" data-i18n="navGet">Get the app</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" id="top">
+  <div class="floaties" id="floaties"></div>
+  <div class="wrap">
+    <div>
+      <span class="badge-pill" data-i18n="heroBadge">Shared countdowns for the moments that matter</span>
+      <h1 data-i18n="heroH1">Count down to what matters — together.</h1>
+      <p class="lead" data-i18n="heroLead">Track birthdays, trips and big days with friends, and give them a little nudge as the day gets close.</p>
+      <div class="stores" id="get">
+        <a class="store" href="#"><span class="as">{APPLE}</span><span><small data-i18n="storeDownload">Download on the</small><strong>App Store</strong></span></a>
+        <a class="store soon" href="#"><span class="gp">{PLAY}</span><span><small data-i18n="storeSoon">Coming soon to</small><strong>Google Play</strong></span></a>
+      </div>
+      <p class="hero-note" data-i18n="heroNote">iPhone widgets · Lock Screen · Live Activities · 9 languages</p>
+    </div>
+
+    <!-- Home phone -->
+    <div class="phone-col">
+      <div class="nudge-callout" data-i18n="tryNudge">👇 Tap a bell to send a nudge</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <h4>Nudge</h4>
+          <div class="sec-label" data-i18n="phHome">Upcoming</div>
+          <div class="mini-card cover">
+            <div class="cov">{TOKYO}<img class="photo" src="https://loremflickr.com/640/260/tokyo,tower,skyline" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
+            <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
+            <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+            <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
+          </div>
+          <div class="mini-card cover">
+            <div class="cov">{CAKE}</div>
+            <div class="l"><span class="chip">🎂 Birthday</span><div class="t">Mom's Birthday</div><div class="d" data-i18n="phYearly">Repeats yearly</div></div>
+            <div class="num"><b>7</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+            <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
+          </div>
+          <div class="mini-card cover">
+            <div class="cov">{WEDDING}</div>
+            <div class="l"><span class="chip">💍 Anniversary</span><div class="t">The Wedding</div><div class="d">8 Feb 2027</div></div>
+            <div class="num"><b>120</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+            <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
+          </div>
+          <div class="mini-card cover">
+            <div class="cov">{BEACH}<img class="photo" src="https://loremflickr.com/640/260/nice,france,sea,mediterranean" alt="South of France" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
+            <div class="l"><span class="chip">🏖️ Holiday</span><div class="t">Summer Break</div><div class="d">1 Jul 2027</div></div>
+            <div class="num"><b>1y</b><small data-i18n="lblToGo">TO GO</small></div>
+            <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Features -->
+<section class="block" id="features">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="featEyebrow">Why Nudge</p>
+    <h2 class="h2" data-i18n="featH2">Anticipation is better shared</h2>
+    <p class="sub" data-i18n="featSub">Everything you need to count down to the big days — and bring your people along for the wait.</p>
+    <div class="feature-grid">
+      <div class="feature"><div class="ic" style="background:rgba(77,141,255,.14)">👥</div><h3 data-i18n="f1t">Shared countdowns</h3><p data-i18n="f1d">Invite friends with a link or code so everyone watches the same day approach.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(255,107,107,.14)">🔔</div><h3 data-i18n="f2t">Send a nudge</h3><p data-i18n="f2d">Tap the bell to give someone a little wave. Add an emoji or a quick message.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(139,92,246,.14)">📱</div><h3 data-i18n="f3t">Widgets everywhere</h3><p data-i18n="f3d">Home and Lock Screen widgets keep the next day a glance away — nudge right from them.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(251,191,36,.16)">⏱️</div><h3 data-i18n="f4t">Live Activities</h3><p data-i18n="f4d">Watch the final hours tick down on the Lock Screen and in the Dynamic Island.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(52,211,153,.16)">🎂</div><h3 data-i18n="f5t">Recurring events</h3><p data-i18n="f5d">Birthdays and anniversaries roll over automatically — weekly and monthly too.</p></div>
+      <div class="feature"><div class="ic" style="background:rgba(255,138,101,.16)">🗓️</div><h3 data-i18n="f6t">From your Calendar</h3><p data-i18n="f6d">Turn a calendar event into a countdown in a tap, with smart category guesses.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Nudge highlight with visuals -->
+<section class="block alt">
+  <div class="wrap split">
+    <div>
+      <h2 data-i18n="nudgeH2">One tap to say “I’m counting down too.”</h2>
+      <p data-i18n="nudgeP1">A nudge is a tiny, joyful ping between friends. React with emoji, fire one back, or leave a surprise that unlocks on the day.</p>
+      <p data-i18n="nudgeP2">Private by design: your countdowns live on your device, shared only when you choose.</p>
+    </div>
+    <div class="nudge-stack">
+      <div class="notif">
+        <div class="ai">{BELL}</div>
+        <div class="nb">
+          <div class="top"><span>Nudge</span><span data-i18n="phNow">now</span></div>
+          <div class="msg" data-i18n="nudgeNotif">👋 Alex nudged you</div>
+          <div class="ctx" data-i18n="nudgeNotifCtx">About Trip to Tokyo</div>
+        </div>
+      </div>
+      <div class="bubbles">
+        <div class="nbubble">
+          <div class="avatar" style="background:#4D8DFF"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">A</div>
+          <div class="body"><div class="nm">Alex</div><div class="tx" data-i18n="nMsg1">Can’t wait!! ✈️</div></div>
+          <div class="reaction try-react" data-react>❤️</div>
+        </div>
+        <div class="nbubble">
+          <div class="avatar" style="background:#FF6B6B"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">S</div>
+          <div class="body"><div class="nm">Sam</div><div class="tx" data-i18n="nMsg2">7 days to go 🥳</div></div>
+          <div class="reaction try-react" data-react>🔥</div>
+        </div>
+        <div class="react-hint"><span data-i18n="reactHint">Tap a reaction to pop it</span><span class="tryit" data-i18n="tryIt">Try it!</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detail showcase -->
+<section class="block">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="detailEyebrow">A closer look</p>
+    <h2 class="h2" data-i18n="detailH2">Every countdown, beautifully</h2>
+    <p class="sub" data-i18n="detailSub">Open one for the full picture — a live count, members, a wall of nudges and reactions, the place on a map, and surprises that unlock on the day.</p>
+    <div class="phone" style="margin:0 auto" aria-hidden="true">
+      <div class="notch"></div>
+      <div class="screen" style="padding-top:44px">
+        <div class="detail-hero">
+          <div class="chips"><span class="chip">🎂 <span data-i18n="catBirthday">Birthday</span></span><span class="chip">📍 Paris</span></div>
+          <div class="bigemoji">🎂</div>
+          <div class="big">7</div>
+          <div class="dl" data-i18n="lblDaysLeft">DAYS LEFT</div>
+          <div class="dt">Sat, 27 Jun 2026</div>
+        </div>
+        <div class="members">
+          <div class="avatar" style="background:#8B5CF6"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">M</div>
+          <div class="avatar" style="background:#4D8DFF"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">A</div>
+          <div class="avatar" style="background:#FF6B6B"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">S</div>
+          <span class="more">+1 <span data-i18n="lblMembers">Members</span></span>
+        </div>
+        <div class="d-sec" data-i18n="lblNudges">Nudges</div>
+        <div class="nbubble" style="box-shadow:none;border-color:rgba(0,0,0,.07);margin-bottom:8px">
+          <div class="avatar" style="background:#4D8DFF;width:30px;height:30px;font-size:12px"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">A</div>
+          <div class="body"><div class="nm" style="font-size:13px">Alex</div><div class="tx" style="font-size:12.5px" data-i18n="nMsg1">Can’t wait!! ✈️</div></div>
+          <div class="reaction" style="font-size:12px">❤️</div>
+        </div>
+        <div class="nbubble" style="box-shadow:none;border-color:rgba(0,0,0,.07)">
+          <div class="avatar" style="background:#FF6B6B;width:30px;height:30px;font-size:12px"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">S</div>
+          <div class="body"><div class="nm" style="font-size:13px">Sam</div><div class="tx" style="font-size:12.5px">🎉</div></div>
+          <div class="reaction" style="font-size:12px">🔥</div>
+        </div>
+        <div class="reveal">
+          <span class="g">🎁</span>
+          <div><div class="rt" data-i18n="revealTitle">2 surprises hidden</div><div class="rs" data-i18n="revealSub">Unlocks on the day</div></div>
+        </div>
+        <div class="maps"><div class="road"></div><div class="pin">📍</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="block alt" id="how">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="howEyebrow">How it works</p>
+    <h2 class="h2" data-i18n="howH2">Three taps to the countdown</h2>
+    <p class="sub" data-i18n="howSub">No account needed to start. Add a day, make it yours, and share it.</p>
+    <div class="steps">
+      <div class="step"><h3 data-i18n="s1t">Create a countdown</h3><p data-i18n="s1d">Pick a date and add an emoji, color, photo, location and reminders.</p></div>
+      <div class="step"><h3 data-i18n="s2t">Share it</h3><p data-i18n="s2d">Send a link or 6-digit code so friends can follow along — AirDrop works too.</p></div>
+      <div class="step"><h3 data-i18n="s3t">Nudge &amp; celebrate</h3><p data-i18n="s3d">Get reminded, nudge each other, and watch the confetti land on the day.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Widgets -->
+<section class="block" id="widgets">
+  <div class="wrap split">
+    <div style="display:grid;place-items:center">
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+        <div style="width:120px;height:120px;border-radius:26px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 38px rgba(80,60,160,.3)">
+          <div style="font-size:13px;font-weight:700">✈️ Tokyo</div>
+          <div><div style="font-size:34px;font-weight:850;line-height:1">42</div><div style="font-size:10px;font-weight:700;opacity:.9" data-i18n="lblDaysLeft">DAYS LEFT</div></div>
+        </div>
+        <div style="width:120px;height:120px;border-radius:26px;background:linear-gradient(135deg,#FF6B6B,#FF8A65);color:#fff;padding:14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 38px rgba(255,107,107,.3)">
+          <div style="font-size:13px;font-weight:700">🎂 Mom</div>
+          <div><div style="font-size:34px;font-weight:850;line-height:1">7</div><div style="font-size:10px;font-weight:700;opacity:.9" data-i18n="lblDaysLeft">DAYS LEFT</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2 data-i18n="widH2">Always one glance away</h2>
+      <p data-i18n="widP1">Add Nudge to your Home or Lock Screen. Rotate through several countdowns automatically, and nudge without opening the app.</p>
+      <p data-i18n="widP2">Set how often the Lock Screen rotates — every 15 minutes, hourly, or off.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Live demo: Dynamic Island + swipe -->
+<section class="block" id="demo">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="demoEyebrow">See it in action</p>
+    <h2 class="h2" data-i18n="demoH2">Live, right on your screen</h2>
+    <p class="sub" data-i18n="demoSub">Watch the final countdown in the Dynamic Island — and swipe any countdown to add it to your Calendar.</p>
+    <div class="demo-grid">
+      <div class="di-phone">
+        <div class="di-wall"></div>
+        <div class="island"><span class="di-emoji">🎂</span><span class="di-count" id="diCount">06d 23:59:58</span><span class="di-ring"></span></div>
+        <div class="di-time" id="diTime">09:41</div>
+        <div class="di-date">Mom's Birthday · 27 Jun</div>
+      </div>
+      <div>
+        <div class="swipe-demo">
+          <div class="swipe-actions">
+            <div class="sa" style="background:#3478f6">{CALPLUS}</div>
+            <div class="sa" style="background:#8e8e93">{ARCHIVE}</div>
+            <div class="sa" style="background:#ff3b30">{TRASH}</div>
+          </div>
+          <div class="swipe-row">
+            <div class="mini-card cover" style="margin:0;border-radius:18px">
+              <div class="cov">{TOKYO}<img class="photo" src="https://loremflickr.com/640/260/tokyo,tower,skyline" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
+              <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
+              <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
+            </div>
+          </div>
+        </div>
+        <p class="swipe-cap" data-i18n="swipeCap">Swipe left to add to Calendar, archive, or delete.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Calendar band -->
+<section class="block alt">
+  <div class="wrap split">
+    <div>
+      <h2 data-i18n="calH2">Start from your Calendar</h2>
+      <p data-i18n="calP">Already have the date saved? Import a calendar event in a tap — Nudge even guesses the category.</p>
+    </div>
+    <div style="display:grid;place-items:center">
+      <div class="calsheet">
+        <div class="ch">🗓️ <span data-i18n="calSheet">From Calendar</span></div>
+        <div class="calrow"><div class="datebadge"><small>Oct</small><b>12</b></div><div class="ci"><b>Trip to Tokyo</b><small data-i18n="calRow1">in 6 weeks · 09:30</small></div><div class="plus">+</div></div>
+        <div class="calrow"><div class="datebadge"><small>Jun</small><b>27</b></div><div class="ci"><b>Mom's Birthday</b><small data-i18n="calRow2">in 7 days</small></div><div class="plus">+</div></div>
+        <div class="calrow"><div class="datebadge"><small>Feb</small><b>08</b></div><div class="ci"><b>The Wedding</b><small data-i18n="calRow3">next year</small></div><div class="plus">+</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Privacy -->
+<section class="block privacy" id="privacy">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="privEyebrow">Privacy</p>
+    <h2 class="h2" data-i18n="privH2">Your countdowns stay yours</h2>
+    <div class="priv-grid">
+      <div class="pcard"><div class="ic">🔒</div><p data-i18n="privP1">Your data syncs privately through your own iCloud, protected by Apple’s encryption — we can’t read it.</p></div>
+      <div class="pcard"><div class="ic">⏲️</div><p data-i18n="privP2">Share codes expire after 15 minutes, so old invites can’t be reused.</p></div>
+      <div class="pcard"><div class="ic">👀</div><p data-i18n="privP3">You always see exactly who’s in a shared countdown — and can leave anytime.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:30px 0 86px"><div class="wrap" style="padding:0">
+  <div class="cta">
+    <h2 data-i18n="ctaH2">Start your first countdown</h2>
+    <p data-i18n="ctaP">Free to download. Count down to the next great day — together.</p>
+    <div class="stores">
+      <a class="store" href="#"><span>{APPLE}</span><span><small data-i18n="storeDownload">Download on the</small><strong>App Store</strong></span></a>
+      <a class="store soon" href="#"><span>{PLAY}</span><span><small data-i18n="storeSoon">Coming soon to</small><strong>Google Play</strong></span></a>
+    </div>
+  </div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><span class="mark">{BELL}</span>Nudge</a>
+      <div class="langs">English · Français · Español · Italiano · Deutsch · Português · 中文 · 한국어 · 日本語</div>
+    </div>
+    <div style="display:flex;gap:22px">
+      <a href="#privacy" data-i18n="footPrivacy">Privacy</a>
+      <a href="#" data-i18n="footSupport">Support</a>
+      <a href="mailto:hello@nudge.app" data-i18n="footContact">Contact</a>
+    </div>
+    <div>© 2026 Nudge</div>
+  </div>
+</footer>
+
+<script>
+  // ---- inline SVG icons (kept out of markup to avoid repetition) ----
+  const ICONS={
+    BELL:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+    BELLW:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+    APPLE:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.9c0-2 1.6-3 1.7-3.1-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7.9 1.4 2 2.4 1.9 1-.1 1.3-.6 2.5-.6 1.2 0 1.5.6 2.5.6 1 0 1.7-1 2.3-1.9.7-1.1 1-2.1 1-2.2 0 0-2-.7-2-3.1zM14.6 6.3c.5-.7.9-1.6.8-2.5-.8 0-1.7.5-2.3 1.2-.5.6-.9 1.5-.8 2.4.9.1 1.8-.4 2.3-1.1z"/></svg>',
+    PLAY:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.4c-.2.2-.3.5-.3.9v17.4c0 .4.1.7.3.9l9.2-9.6L3.6 2.4zm10.2 8.6l2.6-2.7L6.1 2.5c-.3-.2-.6-.2-.9-.1l8.6 8.6zm0 2l-8.6 8.6c.3.1.6.1.9-.1l10.3-5.8-2.6-2.7zm5-3.4l-2.2-1.2-2.9 3 2.9 3 2.2-1.2c.7-.4.7-1.4 0-1.8z"/></svg>',
+    TOKYO:'<svg viewBox="0 0 300 112" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="tsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb36b"/><stop offset="1" stop-color="#ff6f91"/></linearGradient></defs><rect width="300" height="112" fill="url(#tsky)"/><circle cx="216" cy="44" r="20" fill="#ffe1a8" opacity="0.9"/><polygon points="6,102 58,42 110,102" fill="#5b6a92"/><polygon points="44,60 58,42 72,60 64,62 58,55 52,62" fill="#fff"/><g fill="#39435f"><rect x="112" y="62" width="16" height="40"/><rect x="132" y="50" width="14" height="52"/><rect x="150" y="70" width="12" height="32"/><rect x="250" y="56" width="16" height="46"/><rect x="270" y="68" width="12" height="34"/></g><g stroke="#e84a3f" stroke-width="3" fill="none"><path d="M196 102 L206 46 L216 102"/><path d="M199 80 L213 80"/><path d="M193 102 L219 102"/></g></svg>',
+    CAKE:'<svg viewBox="0 0 300 112" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff86b5"/><stop offset="1" stop-color="#ffab73"/></linearGradient></defs><rect width="300" height="112" fill="url(#cbg)"/><g fill="#fff" opacity="0.85"><circle cx="40" cy="24" r="3"/><circle cx="92" cy="16" r="2.5"/><circle cx="156" cy="22" r="3"/><circle cx="214" cy="18" r="2.5"/><circle cx="262" cy="30" r="3"/></g><g transform="translate(116,40)"><rect x="0" y="34" width="68" height="34" rx="4" fill="#fff3e0"/><rect x="10" y="20" width="48" height="20" rx="4" fill="#ffd9ec"/><rect x="0" y="50" width="68" height="6" fill="#ffb3d1"/><g stroke="#ff7eb3" stroke-width="3"><path d="M20 8 V20"/><path d="M34 4 V20"/><path d="M48 8 V20"/></g><g fill="#ffd54a"><circle cx="20" cy="6" r="3"/><circle cx="34" cy="2" r="3"/><circle cx="48" cy="6" r="3"/></g></g></svg>',
+    WEDDING:'<svg viewBox="0 0 300 112" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="wbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8a8ff"/><stop offset="1" stop-color="#ff9ec9"/></linearGradient></defs><rect width="300" height="112" fill="url(#wbg)"/><g fill="#fff" opacity="0.8"><circle cx="44" cy="28" r="2.5"/><circle cx="252" cy="26" r="2.5"/><circle cx="208" cy="66" r="2"/><circle cx="74" cy="74" r="2"/></g><g transform="translate(116,32)" fill="none" stroke="#fff7d6" stroke-width="5"><circle cx="26" cy="28" r="19"/><circle cx="52" cy="28" r="19"/></g><polygon points="150,10 156,20 144,20" fill="#ffe08a"/></svg>',
+    BEACH:'<svg viewBox="0 0 300 112" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ad7ff"/><stop offset="1" stop-color="#bdeeff"/></linearGradient></defs><rect width="300" height="112" fill="url(#bsky)"/><circle cx="58" cy="32" r="15" fill="#fff0a8"/><rect y="68" width="300" height="44" fill="#34b6e0"/><rect y="92" width="300" height="20" fill="#ffe2a8"/><g transform="translate(236,28)"><rect x="6" y="6" width="6" height="58" fill="#9c6b3f"/><g fill="#2bb673"><path d="M9 8 C -10 -2 -18 6 -22 12 C -8 6 2 8 9 12 Z"/><path d="M9 8 C 28 -2 36 6 40 12 C 26 6 16 8 9 12 Z"/><path d="M9 8 C 4 -14 14 -18 22 -20 C 12 -10 12 0 9 10 Z"/></g></g></svg>',
+    CALPLUS:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M12 13v5M9.5 15.5h5"/></svg>',
+    ARCHIVE:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5M10 12.5h4"/></svg>',
+    TRASH:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6.5 6l1 14h9l1-14"/></svg>'
+  };
+  document.body.innerHTML=document.body.innerHTML.replace(/\{(BELL|BELLW|APPLE|PLAY|TOKYO|CAKE|WEDDING|BEACH|CALPLUS|ARCHIVE|TRASH)\}/g,(_,k)=>ICONS[k]);
+
+  // ---- ambient floating emoji ----
+  (function(){
+    const pool=["⏳","🎉","✨","🔔","🎂","✈️","💛","🥳"], host=document.getElementById('floaties');
+    if(host) for(let i=0;i<14;i++){const s=document.createElement('span');s.textContent=pool[i%pool.length];
+      s.style.left=(Math.random()*100)+'%';s.style.fontSize=(16+Math.random()*22)+'px';
+      s.style.animationDuration=(7+Math.random()*7)+'s';s.style.animationDelay=(-Math.random()*10)+'s';host.appendChild(s);}
+  })();
+
+  // ---- i18n (machine-assisted; review by a native speaker recommended) ----
+  const T={
+   fr:{navFeatures:"Fonctions",navHow:"Comment ça marche",navWidgets:"Widgets",navPrivacy:"Confidentialité",navGet:"Télécharger",heroBadge:"Des comptes à rebours partagés pour les moments qui comptent",heroH1:"Comptez les jours qui comptent — ensemble.",heroLead:"Suivez anniversaires, voyages et grands jours avec vos amis, et envoyez-leur un petit nudge à l’approche.",storeDownload:"Télécharger dans l’",storeSoon:"Bientôt sur",heroNote:"Widgets iPhone · Écran verrouillé · Live Activities · 9 langues",phHome:"À venir",phYearly:"Chaque année",lblDaysLeft:"JOURS RESTANTS",lblToGo:"À VENIR",featEyebrow:"Pourquoi Nudge",featH2:"L’attente est meilleure à plusieurs",featSub:"Tout ce qu’il faut pour compter les jours jusqu’aux grands moments — avec vos proches.",f1t:"Comptes à rebours partagés",f1d:"Invitez vos amis avec un lien ou un code pour vivre l’attente ensemble.",f2t:"Envoyez un nudge",f2d:"Touchez la cloche pour faire un petit coucou. Ajoutez un emoji ou un message.",f3t:"Des widgets partout",f3d:"Widgets écran d’accueil et verrouillé : le prochain jour en un coup d’œil — et un nudge direct.",f4t:"Live Activities",f4d:"Suivez les dernières heures en direct sur l’écran verrouillé et la Dynamic Island.",f5t:"Événements récurrents",f5d:"Anniversaires et dates clés se renouvellent automatiquement — chaque semaine ou mois aussi.",f6t:"Depuis votre calendrier",f6d:"Transformez un événement du calendrier en compte à rebours en un geste, catégorie devinée.",nudgeH2:"Un geste pour dire « je compte les jours aussi ».",nudgeP1:"Un nudge, c’est un petit signe joyeux entre amis. Réagissez en emoji, répondez, ou cachez une surprise qui se révèle le jour J.",nudgeP2:"Confidentiel par nature : vos comptes à rebours restent sur votre appareil, partagés seulement si vous le voulez.",phNow:"maintenant",nudgeNotif:"👋 Alex vous a envoyé un nudge",nudgeNotifCtx:"À propos de Voyage à Tokyo",nMsg1:"J’ai trop hâte !! ✈️",nMsg2:"Plus que 7 jours 🥳",detailEyebrow:"En détail",detailH2:"Chaque compte à rebours, en beauté",detailSub:"Ouvrez-en un pour tout voir — décompte en direct, membres, mur de nudges et réactions, le lieu sur une carte, et des surprises qui se révèlent le jour J.",catBirthday:"Anniversaire",lblMembers:"Membres",lblNudges:"Nudges",revealTitle:"2 surprises cachées",revealSub:"Se révèle le jour J",howEyebrow:"Comment ça marche",howH2:"Trois gestes vers le compte à rebours",howSub:"Aucun compte requis pour commencer. Ajoutez une date, personnalisez, partagez.",s1t:"Créez un compte à rebours",s1d:"Choisissez une date, ajoutez emoji, couleur, photo, lieu et rappels.",s2t:"Partagez-le",s2d:"Envoyez un lien ou un code à 6 chiffres — AirDrop fonctionne aussi.",s3t:"Nudge & célébrez",s3d:"Recevez des rappels, faites-vous des nudges, et fêtez le jour J.",widH2:"Toujours à portée de regard",widP1:"Ajoutez Nudge à l’écran d’accueil ou verrouillé. Faites défiler plusieurs comptes à rebours, et envoyez un nudge sans ouvrir l’app.",widP2:"Choisissez la fréquence de rotation de l’écran verrouillé — toutes les 15 min, chaque heure, ou jamais.",calH2:"Partez de votre calendrier",calP:"La date est déjà notée ? Importez un événement en un geste — Nudge devine même la catégorie.",calSheet:"Depuis le calendrier",calRow1:"dans 6 semaines · 09:30",calRow2:"dans 7 jours",calRow3:"l’an prochain",privEyebrow:"Confidentialité",privH2:"Vos comptes à rebours restent les vôtres",privP1:"Vos données se synchronisent en privé via votre iCloud, protégées par le chiffrement d’Apple — nous ne pouvons pas les lire.",privP2:"Les codes de partage expirent après 15 minutes : impossible de réutiliser une vieille invitation.",privP3:"Vous voyez toujours qui participe à un compte à rebours partagé — et pouvez partir à tout moment.",ctaH2:"Lancez votre premier compte à rebours",ctaP:"Téléchargement gratuit. Comptez les jours jusqu’au prochain grand moment — ensemble.",footPrivacy:"Confidentialité",footSupport:"Aide",footContact:"Contact"},
+   es:{navFeatures:"Funciones",navHow:"Cómo funciona",navWidgets:"Widgets",navPrivacy:"Privacidad",navGet:"Descargar",heroBadge:"Cuentas atrás compartidas para los momentos que importan",heroH1:"Cuenta los días que importan — juntos.",heroLead:"Sigue cumpleaños, viajes y grandes días con amigos, y mándales un nudge cuando se acerque la fecha.",storeDownload:"Descárgalo en el",storeSoon:"Pronto en",heroNote:"Widgets de iPhone · Pantalla bloqueada · Live Activities · 9 idiomas",phHome:"Próximos",phYearly:"Cada año",lblDaysLeft:"DÍAS",lblToGo:"FALTAN",featEyebrow:"Por qué Nudge",featH2:"La espera es mejor compartida",featSub:"Todo lo necesario para contar los días hasta los grandes momentos — con tu gente.",f1t:"Cuentas atrás compartidas",f1d:"Invita a amigos con un enlace o código para vivir la espera juntos.",f2t:"Envía un nudge",f2d:"Toca la campana para saludar. Añade un emoji o un mensaje.",f3t:"Widgets en todas partes",f3d:"Widgets de inicio y pantalla bloqueada: el próximo día a un vistazo — y un nudge directo.",f4t:"Live Activities",f4d:"Sigue las últimas horas en directo en la pantalla bloqueada y la Dynamic Island.",f5t:"Eventos recurrentes",f5d:"Cumpleaños y aniversarios se renuevan solos — también cada semana o mes.",f6t:"Desde tu Calendario",f6d:"Convierte un evento del calendario en cuenta atrás con un toque; adivina la categoría.",nudgeH2:"Un toque para decir «yo también cuento los días».",nudgeP1:"Un nudge es un guiño alegre entre amigos. Reacciona con emojis, responde, o deja una sorpresa que se revela el gran día.",nudgeP2:"Privado por diseño: tus cuentas atrás viven en tu dispositivo, se comparten solo si quieres.",phNow:"ahora",nudgeNotif:"👋 Alex te envió un nudge",nudgeNotifCtx:"Sobre Viaje a Tokio",nMsg1:"¡Qué ganas! ✈️",nMsg2:"Quedan 7 días 🥳",detailEyebrow:"De cerca",detailH2:"Cada cuenta atrás, preciosa",detailSub:"Ábrela para verlo todo — cuenta en vivo, miembros, un muro de nudges y reacciones, el lugar en el mapa y sorpresas que se revelan el día.",catBirthday:"Cumpleaños",lblMembers:"Miembros",lblNudges:"Nudges",revealTitle:"2 sorpresas ocultas",revealSub:"Se revela el gran día",howEyebrow:"Cómo funciona",howH2:"Tres toques hasta la cuenta atrás",howSub:"Sin cuenta para empezar. Añade un día, hazlo tuyo y compártelo.",s1t:"Crea una cuenta atrás",s1d:"Elige una fecha y añade emoji, color, foto, lugar y recordatorios.",s2t:"Compártela",s2d:"Envía un enlace o código de 6 dígitos — también por AirDrop.",s3t:"Nudge y celebra",s3d:"Recibe recordatorios, mandaos nudges y celebra el gran día.",widH2:"Siempre a un vistazo",widP1:"Añade Nudge a la pantalla de inicio o bloqueada. Rota entre varias cuentas atrás y manda un nudge sin abrir la app.",widP2:"Elige cada cuánto rota la pantalla bloqueada — cada 15 min, cada hora o nunca.",calH2:"Empieza desde tu Calendario",calP:"¿Ya tienes la fecha guardada? Importa un evento con un toque — Nudge adivina la categoría.",calSheet:"Desde el Calendario",calRow1:"en 6 semanas · 09:30",calRow2:"en 7 días",calRow3:"el año que viene",privEyebrow:"Privacidad",privH2:"Tus cuentas atrás son tuyas",privP1:"Tus datos se sincronizan en privado por tu iCloud, con el cifrado de Apple — no podemos leerlos.",privP2:"Los códigos para compartir caducan a los 15 minutos, así no se reutilizan invitaciones antiguas.",privP3:"Siempre ves quién está en una cuenta atrás compartida — y puedes salir cuando quieras.",ctaH2:"Crea tu primera cuenta atrás",ctaP:"Descarga gratis. Cuenta los días hasta el próximo gran día — juntos.",footPrivacy:"Privacidad",footSupport:"Ayuda",footContact:"Contacto"},
+   it:{navFeatures:"Funzioni",navHow:"Come funziona",navWidgets:"Widget",navPrivacy:"Privacy",navGet:"Scarica",heroBadge:"Conti alla rovescia condivisi per i momenti che contano",heroH1:"Conta i giorni che contano — insieme.",heroLead:"Segui compleanni, viaggi e grandi giorni con gli amici, e mandagli un nudge quando si avvicina la data.",storeDownload:"Scarica su",storeSoon:"Presto su",heroNote:"Widget iPhone · Schermata di blocco · Live Activities · 9 lingue",phHome:"In arrivo",phYearly:"Ogni anno",lblDaysLeft:"GIORNI",lblToGo:"MANCANO",featEyebrow:"Perché Nudge",featH2:"L’attesa è più bella condivisa",featSub:"Tutto il necessario per contare i giorni verso i grandi momenti — con le persone a cui tieni.",f1t:"Conti alla rovescia condivisi",f1d:"Invita gli amici con un link o un codice per vivere l’attesa insieme.",f2t:"Manda un nudge",f2d:"Tocca la campanella per fare un saluto. Aggiungi un emoji o un messaggio.",f3t:"Widget ovunque",f3d:"Widget in home e schermata di blocco: il prossimo giorno a colpo d’occhio — e un nudge diretto.",f4t:"Live Activities",f4d:"Segui le ultime ore in diretta sulla schermata di blocco e nella Dynamic Island.",f5t:"Eventi ricorrenti",f5d:"Compleanni e anniversari si rinnovano da soli — anche ogni settimana o mese.",f6t:"Dal tuo Calendario",f6d:"Trasforma un evento del calendario in conto alla rovescia con un tocco; indovina la categoria.",nudgeH2:"Un tocco per dire «conto i giorni anch’io».",nudgeP1:"Un nudge è un piccolo segnale gioioso tra amici. Reagisci con emoji, rispondi, o lascia una sorpresa che si svela il gran giorno.",nudgeP2:"Privato per scelta: i tuoi conti alla rovescia restano sul dispositivo, condivisi solo se vuoi.",phNow:"adesso",nudgeNotif:"👋 Alex ti ha mandato un nudge",nudgeNotifCtx:"Su Viaggio a Tokyo",nMsg1:"Non vedo l’ora!! ✈️",nMsg2:"Mancano 7 giorni 🥳",detailEyebrow:"Più da vicino",detailH2:"Ogni conto alla rovescia, bellissimo",detailSub:"Aprine uno per vedere tutto — conteggio live, membri, un muro di nudge e reazioni, il luogo sulla mappa e sorprese che si svelano il giorno.",catBirthday:"Compleanno",lblMembers:"Membri",lblNudges:"Nudge",revealTitle:"2 sorprese nascoste",revealSub:"Si svela il gran giorno",howEyebrow:"Come funziona",howH2:"Tre tocchi al conto alla rovescia",howSub:"Nessun account per iniziare. Aggiungi un giorno, personalizzalo e condividilo.",s1t:"Crea un conto alla rovescia",s1d:"Scegli una data e aggiungi emoji, colore, foto, luogo e promemoria.",s2t:"Condividilo",s2d:"Invia un link o un codice a 6 cifre — anche via AirDrop.",s3t:"Nudge e festeggia",s3d:"Ricevi promemoria, scambiatevi nudge e festeggia il gran giorno.",widH2:"Sempre a portata di sguardo",widP1:"Aggiungi Nudge alla home o alla schermata di blocco. Scorri tra più conti alla rovescia e manda un nudge senza aprire l’app.",widP2:"Scegli ogni quanto ruota la schermata di blocco — ogni 15 min, ogni ora o mai.",calH2:"Parti dal tuo Calendario",calP:"Hai già la data salvata? Importa un evento con un tocco — Nudge indovina la categoria.",calSheet:"Dal Calendario",calRow1:"tra 6 settimane · 09:30",calRow2:"tra 7 giorni",calRow3:"l’anno prossimo",privEyebrow:"Privacy",privH2:"I tuoi conti alla rovescia restano tuoi",privP1:"I tuoi dati si sincronizzano in privato tramite il tuo iCloud, con la crittografia di Apple — noi non possiamo leggerli.",privP2:"I codici di condivisione scadono dopo 15 minuti, così i vecchi inviti non si riusano.",privP3:"Vedi sempre chi partecipa a un conto alla rovescia condiviso — e puoi uscire quando vuoi.",ctaH2:"Crea il tuo primo conto alla rovescia",ctaP:"Download gratuito. Conta i giorni verso il prossimo grande giorno — insieme.",footPrivacy:"Privacy",footSupport:"Supporto",footContact:"Contatti"},
+   de:{navFeatures:"Funktionen",navHow:"So funktioniert’s",navWidgets:"Widgets",navPrivacy:"Datenschutz",navGet:"App holen",heroBadge:"Geteilte Countdowns für die Momente, die zählen",heroH1:"Zähl die Tage, die zählen — gemeinsam.",heroLead:"Verfolge Geburtstage, Reisen und große Tage mit Freunden und schick ihnen einen Nudge, wenn’s näher rückt.",storeDownload:"Laden im",storeSoon:"Bald bei",heroNote:"iPhone-Widgets · Sperrbildschirm · Live Activities · 9 Sprachen",phHome:"Demnächst",phYearly:"Jährlich",lblDaysLeft:"TAGE",lblToGo:"NOCH",featEyebrow:"Warum Nudge",featH2:"Vorfreude ist schöner geteilt",featSub:"Alles, um die Tage bis zu den großen Momenten zu zählen — mit deinen Liebsten.",f1t:"Geteilte Countdowns",f1d:"Lade Freunde per Link oder Code ein und fiebert gemeinsam mit.",f2t:"Schick einen Nudge",f2d:"Tipp auf die Glocke für ein kleines Hallo. Mit Emoji oder Nachricht.",f3t:"Widgets überall",f3d:"Widgets auf Home- und Sperrbildschirm: der nächste Tag auf einen Blick — Nudge direkt von dort.",f4t:"Live Activities",f4d:"Verfolge die letzten Stunden live auf dem Sperrbildschirm und in der Dynamic Island.",f5t:"Wiederkehrende Ereignisse",f5d:"Geburtstage und Jahrestage erneuern sich automatisch — auch wöchentlich oder monatlich.",f6t:"Aus deinem Kalender",f6d:"Mach aus einem Kalendereintrag mit einem Tipp einen Countdown — Kategorie wird erraten.",nudgeH2:"Ein Tipp, um zu sagen: „Ich zähl auch mit.“",nudgeP1:"Ein Nudge ist ein kleines, fröhliches Zeichen unter Freunden. Reagier mit Emoji, schick einen zurück oder hinterlass eine Überraschung für den Tag.",nudgeP2:"Privat by Design: deine Countdowns bleiben auf deinem Gerät, geteilt nur, wenn du willst.",phNow:"jetzt",nudgeNotif:"👋 Alex hat dir einen Nudge geschickt",nudgeNotifCtx:"Zu Reise nach Tokio",nMsg1:"Ich freu mich so!! ✈️",nMsg2:"Noch 7 Tage 🥳",detailEyebrow:"Genauer hingesehen",detailH2:"Jeder Countdown, wunderschön",detailSub:"Öffne einen für das ganze Bild — Live-Zähler, Mitglieder, eine Wand voller Nudges und Reaktionen, der Ort auf der Karte und Überraschungen für den Tag.",catBirthday:"Geburtstag",lblMembers:"Mitglieder",lblNudges:"Nudges",revealTitle:"2 Überraschungen versteckt",revealSub:"Wird am Tag enthüllt",howEyebrow:"So funktioniert’s",howH2:"Drei Tipps zum Countdown",howSub:"Kein Konto nötig. Tag hinzufügen, gestalten, teilen.",s1t:"Countdown erstellen",s1d:"Wähl ein Datum und füge Emoji, Farbe, Foto, Ort und Erinnerungen hinzu.",s2t:"Teilen",s2d:"Schick einen Link oder 6-stelligen Code — AirDrop geht auch.",s3t:"Nudgen & feiern",s3d:"Lass dich erinnern, nudgt euch und feiert den großen Tag.",widH2:"Immer nur einen Blick entfernt",widP1:"Füge Nudge zum Home- oder Sperrbildschirm hinzu. Wechsle automatisch zwischen mehreren Countdowns und nudge, ohne die App zu öffnen.",widP2:"Leg fest, wie oft der Sperrbildschirm wechselt — alle 15 Min., stündlich oder nie.",calH2:"Starte aus deinem Kalender",calP:"Termin schon gespeichert? Importier einen Kalendereintrag mit einem Tipp — Nudge errät die Kategorie.",calSheet:"Aus dem Kalender",calRow1:"in 6 Wochen · 09:30",calRow2:"in 7 Tagen",calRow3:"nächstes Jahr",privEyebrow:"Datenschutz",privH2:"Deine Countdowns bleiben deine",privP1:"Deine Daten werden privat über deine iCloud synchronisiert, geschützt durch Apples Verschlüsselung — wir können sie nicht lesen.",privP2:"Freigabecodes laufen nach 15 Minuten ab, alte Einladungen sind so nicht wiederverwendbar.",privP3:"Du siehst immer genau, wer in einem geteilten Countdown ist — und kannst jederzeit gehen.",ctaH2:"Starte deinen ersten Countdown",ctaP:"Kostenlos laden. Zähl die Tage bis zum nächsten großen Tag — gemeinsam.",footPrivacy:"Datenschutz",footSupport:"Hilfe",footContact:"Kontakt"},
+   pt:{navFeatures:"Recursos",navHow:"Como funciona",navWidgets:"Widgets",navPrivacy:"Privacidade",navGet:"Baixar o app",heroBadge:"Contagens compartilhadas para os momentos que importam",heroH1:"Conte os dias que importam — juntos.",heroLead:"Acompanhe aniversários, viagens e grandes dias com amigos e mande um nudge quando a data chegar perto.",storeDownload:"Baixar na",storeSoon:"Em breve no",heroNote:"Widgets do iPhone · Tela bloqueada · Live Activities · 9 idiomas",phHome:"Em breve",phYearly:"Todo ano",lblDaysLeft:"DIAS",lblToGo:"FALTAM",featEyebrow:"Por que Nudge",featH2:"A espera é melhor compartilhada",featSub:"Tudo para contar os dias até os grandes momentos — com quem você ama.",f1t:"Contagens compartilhadas",f1d:"Convide amigos com um link ou código para viver a espera juntos.",f2t:"Mande um nudge",f2d:"Toque no sino para dar um oi. Adicione um emoji ou mensagem.",f3t:"Widgets em todo lugar",f3d:"Widgets na tela de início e bloqueada: o próximo dia num olhar — e um nudge direto.",f4t:"Live Activities",f4d:"Acompanhe as últimas horas ao vivo na tela bloqueada e na Dynamic Island.",f5t:"Eventos recorrentes",f5d:"Aniversários e datas se renovam sozinhos — também por semana ou mês.",f6t:"Do seu Calendário",f6d:"Transforme um evento do calendário em contagem com um toque; a categoria é adivinhada.",nudgeH2:"Um toque para dizer “eu também tô contando”.",nudgeP1:"Um nudge é um aceno alegre entre amigos. Reaja com emoji, responda, ou deixe uma surpresa que aparece no dia.",nudgeP2:"Privado por natureza: suas contagens ficam no seu aparelho, compartilhadas só quando você quiser.",phNow:"agora",nudgeNotif:"👋 Alex te mandou um nudge",nudgeNotifCtx:"Sobre Viagem a Tóquio",nMsg1:"Mal posso esperar!! ✈️",nMsg2:"Faltam 7 dias 🥳",detailEyebrow:"De perto",detailH2:"Cada contagem, linda",detailSub:"Abra uma para ver tudo — contagem ao vivo, membros, um mural de nudges e reações, o lugar no mapa e surpresas que aparecem no dia.",catBirthday:"Aniversário",lblMembers:"Membros",lblNudges:"Nudges",revealTitle:"2 surpresas ocultas",revealSub:"Aparece no dia",howEyebrow:"Como funciona",howH2:"Três toques até a contagem",howSub:"Sem conta para começar. Adicione um dia, deixe do seu jeito e compartilhe.",s1t:"Crie uma contagem",s1d:"Escolha uma data e adicione emoji, cor, foto, local e lembretes.",s2t:"Compartilhe",s2d:"Envie um link ou código de 6 dígitos — AirDrop também funciona.",s3t:"Nudge e comemore",s3d:"Receba lembretes, troquem nudges e comemore o grande dia.",widH2:"Sempre a um olhar",widP1:"Adicione o Nudge à tela de início ou bloqueada. Alterne entre várias contagens e mande um nudge sem abrir o app.",widP2:"Defina com que frequência a tela bloqueada alterna — a cada 15 min, por hora ou nunca.",calH2:"Comece pelo seu Calendário",calP:"Já tem a data salva? Importe um evento com um toque — o Nudge adivinha a categoria.",calSheet:"Do Calendário",calRow1:"em 6 semanas · 09:30",calRow2:"em 7 dias",calRow3:"ano que vem",privEyebrow:"Privacidade",privH2:"Suas contagens são suas",privP1:"Seus dados sincronizam de forma privada pelo seu iCloud, com a criptografia da Apple — não conseguimos ler.",privP2:"Códigos de compartilhamento expiram em 15 minutos, então convites antigos não se reutilizam.",privP3:"Você sempre vê quem está numa contagem compartilhada — e pode sair quando quiser.",ctaH2:"Crie sua primeira contagem",ctaP:"Download grátis. Conte os dias até o próximo grande dia — juntos.",footPrivacy:"Privacidade",footSupport:"Suporte",footContact:"Contato"},
+   zh:{navFeatures:"功能",navHow:"使用方法",navWidgets:"小组件",navPrivacy:"隐私",navGet:"获取应用",heroBadge:"为重要时刻而设的共享倒数日",heroH1:"一起，倒数重要的日子。",heroLead:"和朋友一起追踪生日、旅行和大日子，临近时给对方一个 nudge。",storeDownload:"下载于",storeSoon:"即将登陆",heroNote:"iPhone 小组件 · 锁屏 · 实时活动 · 9 种语言",phHome:"即将到来",phYearly:"每年重复",lblDaysLeft:"天",lblToGo:"还有",featEyebrow:"为什么选 Nudge",featH2:"期待，分享更美好",featSub:"倒数大日子所需的一切——和你在乎的人一起。",f1t:"共享倒数日",f1d:"用链接或代码邀请好友，一起感受日子临近。",f2t:"发送 nudge",f2d:"点一下铃铛打个招呼。可加表情或留言。",f3t:"处处皆小组件",f3d:"主屏与锁屏小组件，下一个日子一眼可见——还能直接 nudge。",f4t:"实时活动",f4d:"在锁屏和灵动岛上实时查看最后的倒计时。",f5t:"重复事件",f5d:"生日和纪念日自动续期——也支持每周、每月。",f6t:"从日历导入",f6d:"一键把日历事件变成倒数日，还能智能猜测类别。",nudgeH2:"一键告诉对方“我也在倒数”。",nudgeP1:"nudge 是朋友间小小的快乐提醒。用表情回应、回敬一个，或藏一个当天才揭晓的惊喜。",nudgeP2:"隐私优先：你的倒数日存在设备上，只有你愿意时才分享。",phNow:"刚刚",nudgeNotif:"👋 Alex 给你发了个 nudge",nudgeNotifCtx:"关于 东京之旅",nMsg1:"太期待啦！！✈️",nMsg2:"还有 7 天 🥳",detailEyebrow:"细看",detailH2:"每个倒数日，都很美",detailSub:"打开看全部——实时倒数、成员、满墙的 nudge 与反应、地图上的地点，还有当天揭晓的惊喜。",catBirthday:"生日",lblMembers:"成员",lblNudges:"Nudge",revealTitle:"隐藏了 2 个惊喜",revealSub:"当天揭晓",howEyebrow:"使用方法",howH2:"三步建好倒数日",howSub:"无需账号即可开始。添加日子、个性化、分享。",s1t:"创建倒数日",s1d:"选好日期，加上表情、颜色、照片、地点和提醒。",s2t:"分享它",s2d:"发送链接或 6 位代码——也支持 AirDrop。",s3t:"Nudge 并庆祝",s3d:"接收提醒、互相 nudge，在大日子撒下纸屑庆祝。",widH2:"一眼即见",widP1:"把 Nudge 加到主屏或锁屏。自动轮播多个倒数日，不开应用也能 nudge。",widP2:"设置锁屏轮播的频率——每 15 分钟、每小时或关闭。",calH2:"从日历开始",calP:"日期已经记好了？一键导入日历事件——Nudge 还能猜出类别。",calSheet:"从日历",calRow1:"6 周后 · 09:30",calRow2:"7 天后",calRow3:"明年",privEyebrow:"隐私",privH2:"你的倒数日，始终属于你",privP1:"数据通过你自己的 iCloud 私密同步，受 Apple 加密保护——我们无法读取。",privP2:"分享代码 15 分钟后过期，旧邀请无法再用。",privP3:"你随时能看到谁在共享倒数日中——也可随时退出。",ctaH2:"创建你的第一个倒数日",ctaP:"免费下载。一起倒数下一个美好的日子。",footPrivacy:"隐私",footSupport:"支持",footContact:"联系"},
+   ko:{navFeatures:"기능",navHow:"사용 방법",navWidgets:"위젯",navPrivacy:"개인정보",navGet:"앱 받기",heroBadge:"소중한 순간을 위한 공유 카운트다운",heroH1:"소중한 날을, 함께 세어요.",heroLead:"생일, 여행, 큰 날을 친구와 함께 추적하고, 가까워지면 살짝 nudge를 보내세요.",storeDownload:"다운로드",storeSoon:"곧 출시",heroNote:"iPhone 위젯 · 잠금 화면 · Live Activities · 9개 언어",phHome:"다가오는 날",phYearly:"매년 반복",lblDaysLeft:"일 남음",lblToGo:"남음",featEyebrow:"왜 Nudge일까",featH2:"설렘은 나눌수록 좋아요",featSub:"큰 날까지 세는 데 필요한 모든 것 — 소중한 사람들과 함께.",f1t:"공유 카운트다운",f1d:"링크나 코드로 친구를 초대해 함께 그날을 기다려요.",f2t:"nudge 보내기",f2d:"종을 눌러 가볍게 인사하세요. 이모지나 메시지도 함께.",f3t:"어디서나 위젯",f3d:"홈·잠금 화면 위젯으로 다음 날을 한눈에 — 위젯에서 바로 nudge.",f4t:"Live Activities",f4d:"잠금 화면과 다이내믹 아일랜드에서 마지막 시간을 실시간으로.",f5t:"반복 이벤트",f5d:"생일과 기념일이 자동으로 갱신 — 매주·매월도 가능.",f6t:"캘린더에서",f6d:"캘린더 일정을 한 번에 카운트다운으로, 카테고리도 알아서 추측.",nudgeH2:"“나도 같이 세고 있어”라고 한 번의 탭으로.",nudgeP1:"nudge는 친구 사이의 작고 즐거운 신호예요. 이모지로 반응하고, 되받아치고, 그날 열리는 깜짝 선물을 숨겨두세요.",nudgeP2:"처음부터 비공개: 카운트다운은 기기에 저장되고, 원할 때만 공유돼요.",phNow:"방금",nudgeNotif:"👋 Alex가 nudge를 보냈어요",nudgeNotifCtx:"도쿄 여행 관련",nMsg1:"너무 기대돼!! ✈️",nMsg2:"7일 남았어 🥳",detailEyebrow:"자세히 보기",detailH2:"모든 카운트다운, 아름답게",detailSub:"하나를 열면 전부 보여요 — 실시간 카운트, 멤버, nudge와 반응의 벽, 지도 속 장소, 그리고 그날 열리는 깜짝 선물.",catBirthday:"생일",lblMembers:"멤버",lblNudges:"Nudge",revealTitle:"숨겨진 깜짝 2개",revealSub:"그날 공개돼요",howEyebrow:"사용 방법",howH2:"세 번의 탭으로 카운트다운",howSub:"시작에 계정이 필요 없어요. 날을 추가하고, 꾸미고, 공유하세요.",s1t:"카운트다운 만들기",s1d:"날짜를 고르고 이모지, 색, 사진, 위치, 알림을 더하세요.",s2t:"공유하기",s2d:"링크나 6자리 코드를 보내세요 — AirDrop도 돼요.",s3t:"Nudge하고 축하하기",s3d:"알림을 받고, 서로 nudge하고, 그날을 축하하세요.",widH2:"언제나 한눈에",widP1:"홈이나 잠금 화면에 Nudge를 추가하세요. 여러 카운트다운을 자동으로 넘기고, 앱을 열지 않고도 nudge.",widP2:"잠금 화면이 바뀌는 주기를 정하세요 — 15분마다, 1시간마다, 또는 끄기.",calH2:"캘린더에서 시작",calP:"이미 날짜를 저장했나요? 일정을 한 번에 가져오세요 — Nudge가 카테고리도 추측해요.",calSheet:"캘린더에서",calRow1:"6주 후 · 09:30",calRow2:"7일 후",calRow3:"내년",privEyebrow:"개인정보",privH2:"카운트다운은 늘 당신의 것",privP1:"데이터는 당신의 iCloud로 비공개 동기화되고, Apple의 암호화로 보호돼요 — 저희는 읽을 수 없어요.",privP2:"공유 코드는 15분 후 만료돼, 오래된 초대는 다시 쓸 수 없어요.",privP3:"공유 카운트다운에 누가 있는지 항상 보이고 — 언제든 나갈 수 있어요.",ctaH2:"첫 카운트다운을 시작하세요",ctaP:"무료 다운로드. 다음 멋진 날을 함께 세어요.",footPrivacy:"개인정보",footSupport:"지원",footContact:"문의"},
+   ja:{navFeatures:"機能",navHow:"使い方",navWidgets:"ウィジェット",navPrivacy:"プライバシー",navGet:"アプリを入手",heroBadge:"大切な瞬間のための共有カウントダウン",heroH1:"大切な日を、いっしょに数えよう。",heroLead:"誕生日や旅行、特別な日を友だちと一緒に追いかけ、近づいたらそっとナッジを。",storeDownload:"ダウンロード",storeSoon:"まもなく登場",heroNote:"iPhoneウィジェット · ロック画面 · Live Activities · 9言語",phHome:"まもなく",phYearly:"毎年繰り返す",lblDaysLeft:"日",lblToGo:"あと",featEyebrow:"Nudgeを選ぶ理由",featH2:"待ち遠しさは、分け合うほど楽しい",featSub:"特別な日まで数えるのに必要なすべてを — 大切な人と一緒に。",f1t:"共有カウントダウン",f1d:"リンクやコードで友だちを招待し、その日をいっしょに待ちましょう。",f2t:"ナッジを送る",f2d:"ベルをタップして軽くごあいさつ。絵文字やメッセージも添えて。",f3t:"どこでもウィジェット",f3d:"ホーム・ロック画面のウィジェットで次の日がひと目で — そこから直接ナッジも。",f4t:"Live Activities",f4d:"ロック画面とダイナミックアイランドで最後の時間をリアルタイムに。",f5t:"繰り返しイベント",f5d:"誕生日や記念日は自動で更新 — 毎週・毎月にも対応。",f6t:"カレンダーから",f6d:"カレンダーの予定をワンタップでカウントダウンに。カテゴリも自動で推測。",nudgeH2:"「私も数えてるよ」をワンタップで。",nudgeP1:"ナッジは友だち同士の小さな楽しい合図。絵文字で反応したり、返したり、当日に開く秘密のサプライズを隠したり。",nudgeP2:"最初からプライベート：カウントダウンは端末に保存され、共有はあなたが選んだときだけ。",phNow:"今",nudgeNotif:"👋 Alexがナッジを送りました",nudgeNotifCtx:"東京旅行について",nMsg1:"待ちきれない！！✈️",nMsg2:"あと7日 🥳",detailEyebrow:"くわしく",detailH2:"どのカウントダウンも、美しく",detailSub:"開けばすべてが見えます — ライブの残り日数、メンバー、ナッジとリアクションのウォール、地図上の場所、そして当日に開くサプライズ。",catBirthday:"誕生日",lblMembers:"メンバー",lblNudges:"ナッジ",revealTitle:"隠れたサプライズ2つ",revealSub:"当日に公開",howEyebrow:"使い方",howH2:"3タップでカウントダウン",howSub:"始めるのにアカウントは不要。日を追加し、自分らしく、共有。",s1t:"カウントダウンを作成",s1d:"日付を選んで絵文字、色、写真、場所、リマインダーを追加。",s2t:"共有する",s2d:"リンクか6桁のコードを送信 — AirDropもOK。",s3t:"ナッジして祝う",s3d:"リマインダーを受け取り、ナッジし合い、当日を祝いましょう。",widH2:"いつもひと目の場所に",widP1:"ホームやロック画面にNudgeを追加。複数のカウントダウンを自動で切り替え、アプリを開かずにナッジ。",widP2:"ロック画面が切り替わる頻度を設定 — 15分ごと、1時間ごと、またはオフ。",calH2:"カレンダーから始める",calP:"予定はもう保存済み？ワンタップで取り込み — Nudgeがカテゴリも推測します。",calSheet:"カレンダーから",calRow1:"6週間後 · 09:30",calRow2:"7日後",calRow3:"来年",privEyebrow:"プライバシー",privH2:"カウントダウンは、ずっとあなたのもの",privP1:"データはあなたのiCloudで非公開に同期され、Appleの暗号化で保護されます — 私たちには読めません。",privP2:"共有コードは15分で期限切れ。古い招待は再利用できません。",privP3:"共有カウントダウンに誰がいるかは常に見え — いつでも退出できます。",ctaH2:"最初のカウントダウンを始めよう",ctaP:"無料でダウンロード。次の素敵な日を、いっしょに。",footPrivacy:"プライバシー",footSupport:"サポート",footContact:"お問い合わせ"}
+  };
+
+  // demo/interaction strings, merged into the main dictionary
+  const EXTRA={
+   fr:{tryNudge:"👇 Touchez une cloche pour envoyer un nudge",tryIt:"Essayez !",sentMsg:"Nudge envoyé !",reactHint:"Touchez une réaction",demoEyebrow:"En action",demoH2:"En direct, sur votre écran",demoSub:"Suivez le dernier compte à rebours dans la Dynamic Island — et balayez un compte à rebours pour l’ajouter à votre calendrier.",swipeCap:"Balayez vers la gauche : calendrier, archiver ou supprimer."},
+   es:{tryNudge:"👇 Toca una campana para enviar un nudge",tryIt:"¡Pruébalo!",sentMsg:"¡Nudge enviado!",reactHint:"Toca una reacción",demoEyebrow:"En acción",demoH2:"En vivo, en tu pantalla",demoSub:"Sigue la cuenta atrás final en la Dynamic Island — y desliza una cuenta atrás para añadirla a tu Calendario.",swipeCap:"Desliza a la izquierda: Calendario, archivar o borrar."},
+   it:{tryNudge:"👇 Tocca una campanella per inviare un nudge",tryIt:"Provalo!",sentMsg:"Nudge inviato!",reactHint:"Tocca una reazione",demoEyebrow:"In azione",demoH2:"Live, sul tuo schermo",demoSub:"Segui il conto alla rovescia finale nella Dynamic Island — e scorri un conto alla rovescia per aggiungerlo al Calendario.",swipeCap:"Scorri a sinistra: Calendario, archivia o elimina."},
+   de:{tryNudge:"👇 Tipp auf eine Glocke für einen Nudge",tryIt:"Probier’s!",sentMsg:"Nudge gesendet!",reactHint:"Tipp auf eine Reaktion",demoEyebrow:"In Aktion",demoH2:"Live, direkt auf dem Bildschirm",demoSub:"Verfolge den finalen Countdown in der Dynamic Island — und wisch über einen Countdown, um ihn zum Kalender hinzuzufügen.",swipeCap:"Nach links wischen: Kalender, archivieren oder löschen."},
+   pt:{tryNudge:"👇 Toque num sino para enviar um nudge",tryIt:"Experimente!",sentMsg:"Nudge enviado!",reactHint:"Toque numa reação",demoEyebrow:"Em ação",demoH2:"Ao vivo, na sua tela",demoSub:"Acompanhe a contagem final na Dynamic Island — e deslize uma contagem para adicioná-la ao seu Calendário.",swipeCap:"Deslize para a esquerda: Calendário, arquivar ou excluir."},
+   zh:{tryNudge:"👇 点一下铃铛发送 nudge",tryIt:"试试看！",sentMsg:"已发送 nudge！",reactHint:"点一下反应",demoEyebrow:"实际演示",demoH2:"就在你的屏幕上，实时呈现",demoSub:"在灵动岛查看最后的倒计时——左滑任意倒数日即可加入日历。",swipeCap:"向左滑动：日历、归档或删除。"},
+   ko:{tryNudge:"👇 종을 눌러 nudge를 보내세요",tryIt:"해보세요!",sentMsg:"nudge 전송됨!",reactHint:"반응을 눌러보세요",demoEyebrow:"실제 동작",demoH2:"화면에서 실시간으로",demoSub:"다이내믹 아일랜드에서 마지막 카운트다운을 보고 — 카운트다운을 밀어 캘린더에 추가하세요.",swipeCap:"왼쪽으로 밀기: 캘린더, 보관, 삭제."},
+   ja:{tryNudge:"👇 ベルをタップしてナッジを送信",tryIt:"試してみて！",sentMsg:"ナッジを送りました！",reactHint:"リアクションをタップ",demoEyebrow:"実際の動き",demoH2:"画面上で、リアルタイムに",demoSub:"ダイナミックアイランドで最後のカウントダウンを — カウントダウンをスワイプしてカレンダーに追加。",swipeCap:"左にスワイプ：カレンダー、アーカイブ、削除。"}
+  };
+  for(const l in EXTRA){T[l]=Object.assign(T[l]||{},EXTRA[l]);}
+
+  // store English originals, then apply a language
+  const nodes=document.querySelectorAll('[data-i18n]');
+  nodes.forEach(n=>n.dataset.en=n.textContent);
+  function setLang(l){
+    const dict=T[l]||{};
+    nodes.forEach(n=>{const k=n.dataset.i18n; n.textContent=(l==='en')?n.dataset.en:(dict[k]||n.dataset.en);});
+    document.documentElement.lang=l;
+    try{localStorage.setItem('nudge_lang',l)}catch(e){}
+  }
+  const saved=(()=>{try{return localStorage.getItem('nudge_lang')}catch(e){return null}})();
+  const initial=saved||(navigator.language||'en').slice(0,2);
+  const supported=['en','fr','es','it','de','pt','zh','ko','ja'];
+  const lang=supported.includes(initial)?initial:'en';
+  document.getElementById('lang').value=lang;
+  setLang(lang);
+  document.getElementById('lang').addEventListener('change',e=>setLang(e.target.value));
+
+  // ---- live Dynamic Island counter ----
+  (function(){
+    const target=new Date(Date.now()+7*864e5-60000); // ~6d 23h 59m out
+    const pad=n=>String(n).padStart(2,'0');
+    const cEl=document.getElementById('diCount'), tEl=document.getElementById('diTime');
+    function tick(){
+      const now=new Date();
+      let s=Math.max(0,Math.floor((target-now)/1000));
+      const d=Math.floor(s/86400); s-=d*86400;
+      const h=Math.floor(s/3600); s-=h*3600;
+      const m=Math.floor(s/60), ss=s-m*60;
+      if(cEl) cEl.textContent=pad(d)+'d '+pad(h)+':'+pad(m)+':'+pad(ss);
+      if(tEl) tEl.textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+    }
+    tick(); setInterval(tick,1000);
+  })();
+
+  // ---- click-to-nudge & tap-to-react ----
+  function burst(el,emojis){
+    const r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+    emojis.forEach(em=>{
+      const s=document.createElement('span'); s.className='fly'; s.textContent=em;
+      s.style.left=cx+'px'; s.style.top=cy+'px';
+      s.style.setProperty('--dx',(Math.random()*90-45)+'px');
+      document.body.appendChild(s); setTimeout(()=>s.remove(),1000);
+    });
+  }
+  document.querySelectorAll('[data-nudge]').forEach(b=>{
+    b.addEventListener('click',ev=>{
+      ev.preventDefault();
+      const card=b.closest('.mini-card');
+      card.classList.remove('wiggle'); void card.offsetWidth; card.classList.add('wiggle');
+      burst(b,['👋','🎉','✨','💛']);
+      let chip=card.querySelector('.sent-chip');
+      if(!chip){chip=document.createElement('span');chip.className='sent-chip';card.appendChild(chip);}
+      chip.textContent=document.getElementById('sentMsgStr').textContent;
+      chip.classList.add('show'); clearTimeout(chip._t); chip._t=setTimeout(()=>chip.classList.remove('show'),1300);
+    });
+  });
+  const REACTS=['❤️','🔥','🎉','🥳','😍','👏'];
+  document.querySelectorAll('[data-react]').forEach(rx=>{
+    rx.addEventListener('click',()=>{
+      const i=REACTS.indexOf(rx.textContent.trim());
+      const next=REACTS[(i+1)%REACTS.length];
+      rx.textContent=next;
+      if(rx.animate) rx.animate([{transform:'scale(1)'},{transform:'scale(1.5)'},{transform:'scale(1)'}],{duration:280});
+      burst(rx,[next]);
+    });
+  });
+</script>
+</body>
+</html>
