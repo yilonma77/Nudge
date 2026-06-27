@@ -297,7 +297,7 @@
   .widget-demo{width:202px;max-width:100%;border-radius:22px;background:linear-gradient(135deg,#4D8DFF,#8B5CF6);color:#fff;padding:14px;display:flex;flex-direction:column;gap:11px;box-shadow:0 16px 36px rgba(80,60,160,.32);position:relative;overflow:hidden}
   .widget-demo .hsw-big b{font-size:30px}
   .wd-cov{position:absolute;inset:0;z-index:0;display:none}
-  .wd-cov svg{width:100%;height:100%;display:block}
+  .wd-cov svg,.wd-cov .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .widget-demo::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.58))}
   .widget-demo .hsw-top,.widget-demo .hsw-big,.widget-demo .hsw-controls{position:relative;z-index:1}
   .try-hint{font-size:13px;font-weight:700;color:var(--muted);animation:bob 1.7s ease-in-out infinite}
@@ -377,7 +377,7 @@
           <h4>Nudge</h4>
           <div class="sec-label" data-i18n="phHome">Upcoming</div>
           <div class="mini-card cover">
-            <div class="cov">{TOKYO}</div>
+            <div class="cov">{TOKYO}<img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Skyscrapers%20of%20Shinjuku%202009%20January.jpg?width=800" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/tokyo.jpg'}else{this.remove()}"></div>
             <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
             <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
             <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
@@ -395,7 +395,7 @@
             <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
           </div>
           <div class="mini-card cover">
-            <div class="cov">{BEACH}</div>
+            <div class="cov">{BEACH}<img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Nice%20-%20Promenade%20des%20Anglais.jpg?width=800" alt="South of France" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/nice.jpg'}else{this.remove()}"></div>
             <div class="l"><span class="chip">🏖️ Holiday</span><div class="t">Summer Break</div><div class="d">1 Jul 2027</div></div>
             <div class="num"><b>1y</b><small data-i18n="lblToGo">TO GO</small></div>
             <button class="bell" data-nudge aria-label="Nudge">{BELLW}</button>
@@ -528,7 +528,7 @@
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
         <div class="widget-demo">
-          <div class="wd-cov" id="wdScene0">{TOKYO}</div><div class="wd-cov" id="wdScene1">{CAKE}</div><div class="wd-cov" id="wdScene2">{WEDDING}</div><div class="wd-cov" id="wdScene3">{BEACH}</div>
+          <div class="wd-cov" id="wdScene0">{TOKYO}<img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Skyscrapers%20of%20Shinjuku%202009%20January.jpg?width=800" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/tokyo.jpg'}else{this.remove()}"></div><div class="wd-cov" id="wdScene1">{CAKE}</div><div class="wd-cov" id="wdScene2">{WEDDING}</div><div class="wd-cov" id="wdScene3">{BEACH}<img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Nice%20-%20Promenade%20des%20Anglais.jpg?width=800" alt="South of France" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/nice.jpg'}else{this.remove()}"></div>
           <div class="hsw-top" id="wdTop">✈️ Trip to Tokyo</div>
           <div class="hsw-big"><b id="wdNum">42</b><span data-i18n="lblDaysLeft">DAYS LEFT</span></div>
           <div class="hsw-controls">
@@ -549,7 +549,7 @@
         </div>
         <div class="swipe-row">
           <div class="mini-card cover" style="margin:0;border-radius:18px">
-            <div class="cov">{TOKYO}</div>
+            <div class="cov">{TOKYO}<img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Skyscrapers%20of%20Shinjuku%202009%20January.jpg?width=800" alt="Tokyo" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/tokyo.jpg'}else{this.remove()}"></div>
             <div class="l"><span class="chip">✈️ Trip</span><div class="t">Trip to Tokyo</div><div class="d">12 Oct 2026</div></div>
             <div class="num"><b>42</b><small data-i18n="lblDaysLeft">DAYS LEFT</small></div>
           </div>
